@@ -149,7 +149,7 @@ namespace Autofac.Integration.Mvc
         /// <param name="serviceType">Type of the service.</param>
         /// <returns>The single instance if resolved; otherwise, <c>null</c>.</returns>
         [SecurityCritical]
-        public object GetService(Type serviceType)
+        public virtual object GetService(Type serviceType)
         {
             return RequestLifetimeScope.ResolveOptional(serviceType);
         }
@@ -160,7 +160,7 @@ namespace Autofac.Integration.Mvc
         /// <param name="serviceType">Type of the service.</param>
         /// <returns>The list of instances if any were resolved; otherwise, an empty list.</returns>
         [SecurityCritical]
-        public IEnumerable<object> GetServices(Type serviceType)
+        public virtual IEnumerable<object> GetServices(Type serviceType)
         {
             var enumerableServiceType = typeof(IEnumerable<>).MakeGenericType(serviceType);
             var instance = RequestLifetimeScope.Resolve(enumerableServiceType);

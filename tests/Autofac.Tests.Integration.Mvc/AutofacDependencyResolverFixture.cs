@@ -24,6 +24,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Autofac.Integration.Mvc;
@@ -147,9 +148,11 @@ namespace Autofac.Tests.Integration.Mvc
         public void DerivedResolverTypesCanStillBeCurrentResolver()
         {
             var container = new ContainerBuilder().Build();
-            var provider = new DerivedAutofacDependencyResolver(container);
-            DependencyResolver.SetResolver(provider);
-            Assert.AreEqual(provider, AutofacDependencyResolver.Current, "You should be able to derive from AutofacDependencyResolver and still use the Current property.");
+            var resolver = new DerivedAutofacDependencyResolver(container);
+            DependencyResolver.SetResolver(resolver);
+            Assert.AreEqual(resolver, AutofacDependencyResolver.Current, "You should be able to derive from AutofacDependencyResolver and still use the Current property.");
+            Assert.That(resolver.GetService(typeof(object)), Is.Not.Null);
+            Assert.That(resolver.GetServices(typeof(object)), Has.Length.EqualTo(1));
         }
 
         [Test]
@@ -206,9 +209,18 @@ namespace Autofac.Tests.Integration.Mvc
 
         private class DerivedAutofacDependencyResolver : AutofacDependencyResolver
         {
-            public DerivedAutofacDependencyResolver(IContainer container)
-                : base(container, new StubLifetimeScopeProvider(container))
+            public DerivedAutofacDependencyResolver(IContainer container) : base(container)
             {
+            }
+
+            public override object GetService(Type serviceType)
+            {
+                return serviceType == typeof(object) ? new object() : base.GetService(serviceType);
+            }
+
+            public override IEnumerable<object> GetServices(Type serviceType)
+            {
+                return serviceType == typeof(object) ? new[] {new object()} : base.GetServices(serviceType);
             }
         }
     }
