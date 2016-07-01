@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofac.Integration.Mvc", "src\Autofac.Integration.Mvc\Autofac.Integration.Mvc.csproj", "{DD874E64-C7EC-464D-925F-CF4A709EDEEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofac.Tests.Integration.Mvc", "tests\Autofac.Tests.Integration.Mvc\Autofac.Tests.Integration.Mvc.csproj", "{438022BC-2202-4F9D-A3AD-6EA84DB947D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofac.Integration.Mvc.Test", "test\Autofac.Integration.Mvc.Test\Autofac.Integration.Mvc.Test.csproj", "{438022BC-2202-4F9D-A3AD-6EA84DB947D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
