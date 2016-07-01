@@ -25,7 +25,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Security;
 using System.Web.Mvc;
 using Autofac.Builder;
 using Autofac.Core;
@@ -36,10 +35,9 @@ namespace Autofac.Integration.Mvc
     /// A registration source for building view registrations.
     /// </summary>
     /// <remarks>
-    /// Supports view registrations for <see cref="WebViewPage"/>, <see cref="ViewPage"/>, 
+    /// Supports view registrations for <see cref="WebViewPage"/>, <see cref="ViewPage"/>,
     /// <see cref="ViewMasterPage"/> and <see cref="ViewUserControl"/> derived types.
     /// </remarks>
-    [SecuritySafeCritical]
     public class ViewRegistrationSource : IRegistrationSource
     {
         /// <summary>
@@ -49,7 +47,6 @@ namespace Autofac.Integration.Mvc
         /// <param name="service">The service that was requested.</param>
         /// <param name="registrationAccessor">A function that will return existing registrations for a service.</param>
         /// <returns>Registrations providing the service.</returns>
-        [SecuritySafeCritical]
         public IEnumerable<IComponentRegistration> RegistrationsFor(Service service, Func<Service, IEnumerable<IComponentRegistration>> registrationAccessor)
         {
             var typedService = service as IServiceWithType;

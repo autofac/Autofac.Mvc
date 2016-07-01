@@ -24,7 +24,6 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Security;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
@@ -104,7 +103,6 @@ namespace Autofac.Integration.Mvc
     /// The lifetime for each of these items is one web request.
     /// </para>
     /// </remarks>
-    [SecuritySafeCritical]
     public class AutofacWebTypesModule : Module
     {
         /// <summary>
@@ -124,7 +122,6 @@ namespace Autofac.Integration.Mvc
         /// </remarks>
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "A lot of types get registered, but there isn't much complexity.")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "The complexity is in the registration lambdas. They're not actually hard to maintain.")]
-        [SecuritySafeCritical]
         protected override void Load(ContainerBuilder builder)
         {
             builder.Register(c => new HttpContextWrapper(HttpContext.Current))

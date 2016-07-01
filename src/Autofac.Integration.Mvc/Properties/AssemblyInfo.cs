@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Web;
 using Autofac.Integration.Mvc;
 
@@ -12,7 +11,6 @@ using Autofac.Integration.Mvc;
 [assembly: PreApplicationStartMethod(typeof(PreApplicationStartCode), "Start")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
-[assembly: AllowPartiallyTrustedCallers]
 
 [assembly: AssemblyCompany("Autofac Project - http://autofac.org")]
 [assembly: AssemblyProduct("Autofac")]
