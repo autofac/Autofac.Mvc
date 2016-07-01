@@ -1,26 +1,24 @@
 ﻿using System;
-using Autofac.Integration.Mvc;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 
 namespace Autofac.Integration.Mvc.Test
 {
-    [TestFixture]
     public class RequestLifetimeHttpModuleFixture
     {
-        [Test]
+        [Fact]
         public void CannotSetNullLifetimeScopeProvider()
         {
             var exception = Assert.Throws<ArgumentNullException>(() => RequestLifetimeHttpModule.SetLifetimeScopeProvider(null));
-            Assert.That(exception.ParamName, Is.EqualTo("lifetimeScopeProvider"));
+            Assert.Equal("lifetimeScopeProvider", exception.ParamName);
         }
 
-        [Test]
+        [Fact]
         public void CanSetNonNullLifetimeScopeProvider()
         {
             var provider = new Mock<ILifetimeScopeProvider>();
             RequestLifetimeHttpModule.SetLifetimeScopeProvider(provider.Object);
-            Assert.That(RequestLifetimeHttpModule.LifetimeScopeProvider, Is.EqualTo(provider.Object));
+            Assert.Equal(provider.Object, RequestLifetimeHttpModule.LifetimeScopeProvider);
         }
     }
 }

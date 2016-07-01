@@ -1,40 +1,42 @@
 ﻿using System;
 using Autofac.Core.Lifetime;
-using Autofac.Integration.Mvc;
 
 namespace Autofac.Integration.Mvc.Test
 {
     public class StubLifetimeScopeProvider : ILifetimeScopeProvider
     {
-        ILifetimeScope _lifetimeScope;
-        readonly ILifetimeScope _container;
+        private readonly ILifetimeScope _container;
+
+        private ILifetimeScope _lifetimeScope;
 
         public StubLifetimeScopeProvider(ILifetimeScope container)
         {
-            _container = container;
+            this._container = container;
         }
 
         public ILifetimeScope ApplicationContainer
         {
-            get { return _container; }
-        }
-
-        public ILifetimeScope GetLifetimeScope(Action<ContainerBuilder> configurationAction)
-        {
-            return _lifetimeScope ?? (_lifetimeScope = BuildLifetimeScope(configurationAction));
+            get { return this._container; }
         }
 
         public void EndLifetimeScope()
         {
-            if (_lifetimeScope != null)
-                _lifetimeScope.Dispose();
+            if (this._lifetimeScope != null)
+            {
+                this._lifetimeScope.Dispose();
+            }
         }
 
-        ILifetimeScope BuildLifetimeScope(Action<ContainerBuilder> configurationAction)
+        public ILifetimeScope GetLifetimeScope(Action<ContainerBuilder> configurationAction)
+        {
+            return this._lifetimeScope ?? (this._lifetimeScope = this.BuildLifetimeScope(configurationAction));
+        }
+
+        private ILifetimeScope BuildLifetimeScope(Action<ContainerBuilder> configurationAction)
         {
             return (configurationAction == null)
-                       ? _container.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag)
-                       : _container.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag, configurationAction);
+                       ? this._container.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag)
+                       : this._container.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag, configurationAction);
         }
     }
 }

@@ -1,35 +1,14 @@
 ﻿using System;
 using System.Web.Mvc.Filters;
 using Autofac.Builder;
-using Autofac.Integration.Mvc;
 
 namespace Autofac.Integration.Mvc.Test
 {
     public class AuthenticationFilterFixture : AutofacFilterBaseFixture<TestAuthenticationFilter, TestAuthenticationFilter2, IAuthenticationFilter>
     {
-        protected override Action<IRegistrationBuilder<TestAuthenticationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstControllerRegistration()
+        public AuthenticationFilterFixture(AutofacFilterTestContext testContext)
+            : base(testContext)
         {
-            return r => r.AsAuthenticationFilterFor<TestController>();
-        }
-
-        protected override Action<IRegistrationBuilder<TestAuthenticationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstActionRegistration()
-        {
-            return r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default(string)));
-        }
-
-        protected override Action<IRegistrationBuilder<TestAuthenticationFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondControllerRegistration()
-        {
-            return r => r.AsAuthenticationFilterFor<TestController>(20);
-        }
-
-        protected override Action<IRegistrationBuilder<TestAuthenticationFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondActionRegistration()
-        {
-            return r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default(string)), 20);
-        }
-
-        protected override Action<ContainerBuilder> ConfigureControllerFilterOverride()
-        {
-            return builder => builder.OverrideAuthenticationFilterFor<TestController>();
         }
 
         protected override Action<ContainerBuilder> ConfigureActionFilterOverride()
@@ -42,9 +21,34 @@ namespace Autofac.Integration.Mvc.Test
             return r => r.AsAuthenticationFilterOverrideFor<TestController>(c => c.Action1(default(string)));
         }
 
+        protected override Action<ContainerBuilder> ConfigureControllerFilterOverride()
+        {
+            return builder => builder.OverrideAuthenticationFilterFor<TestController>();
+        }
+
         protected override Action<IRegistrationBuilder<TestAuthenticationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureControllerOverrideRegistration()
         {
             return r => r.AsAuthenticationFilterOverrideFor<TestController>();
+        }
+
+        protected override Action<IRegistrationBuilder<TestAuthenticationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstActionRegistration()
+        {
+            return r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default(string)));
+        }
+
+        protected override Action<IRegistrationBuilder<TestAuthenticationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstControllerRegistration()
+        {
+            return r => r.AsAuthenticationFilterFor<TestController>();
+        }
+
+        protected override Action<IRegistrationBuilder<TestAuthenticationFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondActionRegistration()
+        {
+            return r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default(string)), 20);
+        }
+
+        protected override Action<IRegistrationBuilder<TestAuthenticationFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondControllerRegistration()
+        {
+            return r => r.AsAuthenticationFilterFor<TestController>(20);
         }
 
         protected override Type GetWrapperType()

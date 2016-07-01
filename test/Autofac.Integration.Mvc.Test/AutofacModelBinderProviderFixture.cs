@@ -4,38 +4,13 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using Autofac.Core.Lifetime;
-using Autofac.Integration.Mvc;
-using NUnit.Framework;
+using Xunit;
 
 namespace Autofac.Integration.Mvc.Test
 {
-    [TestFixture]
     public class AutofacModelBinderProviderFixture
     {
-        [Test]
-        public void ProviderIsRegisteredAsSingleInstance()
-        {
-            var container = BuildContainer();
-            var modelBinderProvider = container.Resolve<IModelBinderProvider>();
-            Assert.That(modelBinderProvider, Is.InstanceOf<AutofacModelBinderProvider>());
-
-            using (var httpRequestScope = container.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
-            {
-                Assert.That(httpRequestScope.Resolve<IModelBinderProvider>(), Is.EqualTo(modelBinderProvider));
-            }
-        }
-
-        [Test]
-        public void ModelBindersAreRegistered()
-        {
-            using (var httpRequestScope = BuildContainer().BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
-            {
-                var modelBinders = httpRequestScope.Resolve<IEnumerable<IModelBinder>>();
-                Assert.That(modelBinders.Count(), Is.EqualTo(1));
-            }
-        }
-
-        [Test]
+        [Fact]
         public void ModelBinderHasDependenciesInjected()
         {
             using (var httpRequestScope = BuildContainer().BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
@@ -43,12 +18,53 @@ namespace Autofac.Integration.Mvc.Test
                 var modelBinder = httpRequestScope.Resolve<IEnumerable<IModelBinder>>()
                     .OfType<ModelBinder>()
                     .FirstOrDefault();
-                Assert.That(modelBinder, Is.Not.Null);
-                Assert.That(modelBinder.Dependency, Is.Not.Null);
+                Assert.NotNull(modelBinder);
+                Assert.NotNull(modelBinder.Dependency);
             }
         }
 
-        [Test]
+        [Fact]
+        public void ModelBindersAreRegistered()
+        {
+            using (var httpRequestScope = BuildContainer().BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
+            {
+                var modelBinders = httpRequestScope.Resolve<IEnumerable<IModelBinder>>();
+                Assert.Equal(1, modelBinders.Count());
+            }
+        }
+
+        [Fact]
+        public void MultipleTypesCanBeDeclaredWithMultipleAttribute()
+        {
+            BuildContainer();
+            var provider = (AutofacModelBinderProvider)DependencyResolver.Current.GetService<IModelBinderProvider>();
+            Assert.IsType<ModelBinder>(provider.GetBinder(typeof(string)));
+            Assert.IsType<ModelBinder>(provider.GetBinder(typeof(DateTime)));
+        }
+
+        [Fact]
+        public void MultipleTypesCanBeDeclaredWithSingleAttribute()
+        {
+            BuildContainer();
+            var provider = (AutofacModelBinderProvider)DependencyResolver.Current.GetService<IModelBinderProvider>();
+            Assert.IsType<ModelBinder>(provider.GetBinder(typeof(Model)));
+            Assert.IsType<ModelBinder>(provider.GetBinder(typeof(string)));
+        }
+
+        [Fact]
+        public void ProviderIsRegisteredAsSingleInstance()
+        {
+            var container = BuildContainer();
+            var modelBinderProvider = container.Resolve<IModelBinderProvider>();
+            Assert.IsType<AutofacModelBinderProvider>(modelBinderProvider);
+
+            using (var httpRequestScope = container.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
+            {
+                Assert.Equal(modelBinderProvider, httpRequestScope.Resolve<IModelBinderProvider>());
+            }
+        }
+
+        [Fact]
         public void ReturnsNullWhenModelBinderRegisteredWithoutMetadata()
         {
             var builder = new ContainerBuilder();
@@ -59,33 +75,15 @@ namespace Autofac.Integration.Mvc.Test
             using (var httpRequestScope = container.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
             {
                 var modelBinders = httpRequestScope.Resolve<IEnumerable<IModelBinder>>().ToList();
-                Assert.That(modelBinders.Count(), Is.EqualTo(1));
-                Assert.That(modelBinders.First(), Is.InstanceOf<ModelBinderWithoutAttribute>());
+                Assert.Equal(1, modelBinders.Count());
+                Assert.IsType<ModelBinderWithoutAttribute>(modelBinders.First());
 
                 var provider = (AutofacModelBinderProvider)httpRequestScope.Resolve<IModelBinderProvider>();
-                Assert.That(provider.GetBinder(typeof(object)), Is.Null);
+                Assert.Null(provider.GetBinder(typeof(object)));
             }
         }
 
-        [Test]
-        public void MultipleTypesCanBeDeclaredWithSingleAttribute()
-        {
-            BuildContainer();
-            var provider = (AutofacModelBinderProvider)DependencyResolver.Current.GetService<IModelBinderProvider>();
-            Assert.That(provider.GetBinder(typeof(Model)), Is.InstanceOf<ModelBinder>());
-            Assert.That(provider.GetBinder(typeof(string)), Is.InstanceOf<ModelBinder>());
-        }
-
-        [Test]
-        public void MultipleTypesCanBeDeclaredWithMultipleAttribute()
-        {
-            BuildContainer();
-            var provider = (AutofacModelBinderProvider)DependencyResolver.Current.GetService<IModelBinderProvider>();
-            Assert.That(provider.GetBinder(typeof(string)), Is.InstanceOf<ModelBinder>());
-            Assert.That(provider.GetBinder(typeof(DateTime)), Is.InstanceOf<ModelBinder>());
-        }
-
-        static ILifetimeScope BuildContainer()
+        private static ILifetimeScope BuildContainer()
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<Dependency>().AsSelf();
@@ -111,12 +109,12 @@ namespace Autofac.Integration.Mvc.Test
     [ModelBinderType(typeof(DateTime))]
     public class ModelBinder : IModelBinder
     {
-        public Dependency Dependency { get; private set; }
-
         public ModelBinder(Dependency dependency)
         {
-            Dependency = dependency;
+            this.Dependency = dependency;
         }
+
+        public Dependency Dependency { get; private set; }
 
         public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {

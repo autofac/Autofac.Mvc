@@ -1,34 +1,32 @@
 ﻿using System;
-using Autofac.Integration.Mvc;
-using NUnit.Framework;
+using Xunit;
 
 namespace Autofac.Integration.Mvc.Test
 {
-    [TestFixture]
     public class RequestLifetimeScopeProviderFixture
     {
-        [Test]
+        [Fact]
         public void ContainerMustBeProvided()
         {
             var exception = Assert.Throws<ArgumentNullException>(() => new RequestLifetimeScopeProvider(null));
-            Assert.That(exception.ParamName, Is.EqualTo("container"));
+            Assert.Equal("container", exception.ParamName);
         }
 
-        [Test]
+        [Fact]
         public void MeaningfulExceptionThrowWhenHttpContextNotAvailable()
         {
             var container = new ContainerBuilder().Build();
             var provider = new RequestLifetimeScopeProvider(container);
             var exception = Assert.Throws<InvalidOperationException>(() => provider.GetLifetimeScope(b => { }));
-            Assert.That(exception.Message, Is.EqualTo(RequestLifetimeScopeProviderResources.HttpContextNotAvailable));
+            Assert.Equal(RequestLifetimeScopeProviderResources.HttpContextNotAvailable, exception.Message);
         }
 
-        [Test]
+        [Fact]
         public void ProviderRegisteredWithHttpModule()
         {
             var container = new ContainerBuilder().Build();
             var provider = new RequestLifetimeScopeProvider(container);
-            Assert.That(RequestLifetimeHttpModule.LifetimeScopeProvider, Is.EqualTo(provider));
+            Assert.Equal(provider, RequestLifetimeHttpModule.LifetimeScopeProvider);
         }
     }
 }

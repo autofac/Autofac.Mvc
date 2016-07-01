@@ -3,33 +3,31 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Autofac.Integration.Mvc;
-using NUnit.Framework;
+using Xunit;
 
 namespace Autofac.Integration.Mvc.Test
 {
-    [TestFixture]
     public class AutofacWebTypesModuleFixture
     {
-        [Test]
-        [TestCase(typeof(HttpContextBase))]
-        [TestCase(typeof(HttpRequestBase))]
-        [TestCase(typeof(HttpResponseBase))]
-        [TestCase(typeof(HttpServerUtilityBase))]
-        [TestCase(typeof(HttpSessionStateBase))]
-        [TestCase(typeof(HttpApplicationStateBase))]
-        [TestCase(typeof(HttpBrowserCapabilitiesBase))]
-        [TestCase(typeof(HttpFileCollectionBase))]
-        [TestCase(typeof(RequestContext))]
-        [TestCase(typeof(HttpCachePolicyBase))]
-        [TestCase(typeof(VirtualPathProvider))]
-        [TestCase(typeof(UrlHelper))]
+        [Theory]
+        [InlineData(typeof(HttpContextBase))]
+        [InlineData(typeof(HttpRequestBase))]
+        [InlineData(typeof(HttpResponseBase))]
+        [InlineData(typeof(HttpServerUtilityBase))]
+        [InlineData(typeof(HttpSessionStateBase))]
+        [InlineData(typeof(HttpApplicationStateBase))]
+        [InlineData(typeof(HttpBrowserCapabilitiesBase))]
+        [InlineData(typeof(HttpFileCollectionBase))]
+        [InlineData(typeof(RequestContext))]
+        [InlineData(typeof(HttpCachePolicyBase))]
+        [InlineData(typeof(VirtualPathProvider))]
+        [InlineData(typeof(UrlHelper))]
         public void EnsureWebTypeIsRegistered(Type serviceType)
         {
-            ContainerBuilder builder = new ContainerBuilder();
+            var builder = new ContainerBuilder();
             builder.RegisterModule(new AutofacWebTypesModule());
-            IContainer container = builder.Build();
-            Assert.That(container.IsRegistered(serviceType), Is.True);
+            var container = builder.Build();
+            Assert.True(container.IsRegistered(serviceType));
         }
     }
 }

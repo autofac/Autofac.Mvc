@@ -2,49 +2,33 @@
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
-using Autofac.Integration.Mvc;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 
 namespace Autofac.Integration.Mvc.Test
 {
-    [TestFixture]
-    public class AutofacFilterProviderFixture
+    public class AutofacFilterProviderFixture : IClassFixture<DependencyResolverReplacementContext>
     {
-        ControllerContext _baseControllerContext;
-        ControllerDescriptor _controllerDescriptor;
+        private string _actionName;
 
-        MethodInfo _baseMethodInfo;
-        string _actionName;
+        private ControllerContext _baseControllerContext;
 
-        ReflectedActionDescriptor _reflectedActionDescriptor;
+        private MethodInfo _baseMethodInfo;
 
-        [TestFixtureSetUp]
-        public void FixtureSetUp()
+        private ControllerDescriptor _controllerDescriptor;
+
+        private ReflectedActionDescriptor _reflectedActionDescriptor;
+
+        public AutofacFilterProviderFixture()
         {
-            _baseControllerContext = new ControllerContext {Controller = new TestController()};
-
-            _baseMethodInfo = TestController.GetAction1MethodInfo<TestController>();
-            _actionName = _baseMethodInfo.Name;
-
-            _controllerDescriptor = new Mock<ControllerDescriptor>().Object;
-            _reflectedActionDescriptor = new ReflectedActionDescriptor(_baseMethodInfo, _actionName, _controllerDescriptor);
+            this._baseControllerContext = new ControllerContext { Controller = new TestController() };
+            this._baseMethodInfo = TestController.GetAction1MethodInfo<TestController>();
+            this._actionName = this._baseMethodInfo.Name;
+            this._controllerDescriptor = new Mock<ControllerDescriptor>().Object;
+            this._reflectedActionDescriptor = new ReflectedActionDescriptor(this._baseMethodInfo, this._actionName, this._controllerDescriptor);
         }
 
-        [Test]
-        public void FilterRegistrationsWithoutMetadataIgnored()
-        {
-            var builder = new ContainerBuilder();
-            builder.RegisterType<AuthorizeAttribute>().AsImplementedInterfaces();
-            var container = builder.Build();
-            SetupMockLifetimeScopeProvider(container);
-            var provider = new AutofacFilterProvider();
-
-            var filters = provider.GetFilters(_baseControllerContext, _reflectedActionDescriptor).ToList();
-            Assert.That(filters, Has.Count.EqualTo(0));
-        }
-
-        [Test]
+        [Fact]
         public void CanRegisterMultipleFilterTypesAgainstSingleService()
         {
             var builder = new ContainerBuilder();
@@ -56,14 +40,27 @@ namespace Autofac.Integration.Mvc.Test
                 .AsResultFilterFor<TestController>();
             var container = builder.Build();
 
-            Assert.That(container.Resolve<IActionFilter>(), Is.Not.Null);
-            Assert.That(container.Resolve<IAuthenticationFilter>(), Is.Not.Null);
-            Assert.That(container.Resolve<IAuthorizationFilter>(), Is.Not.Null);
-            Assert.That(container.Resolve<IExceptionFilter>(), Is.Not.Null);
-            Assert.That(container.Resolve<IResultFilter>(), Is.Not.Null);
+            Assert.NotNull(container.Resolve<IActionFilter>());
+            Assert.NotNull(container.Resolve<IAuthenticationFilter>());
+            Assert.NotNull(container.Resolve<IAuthorizationFilter>());
+            Assert.NotNull(container.Resolve<IExceptionFilter>());
+            Assert.NotNull(container.Resolve<IResultFilter>());
         }
 
-        static void SetupMockLifetimeScopeProvider(ILifetimeScope container)
+        [Fact]
+        public void FilterRegistrationsWithoutMetadataIgnored()
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<AuthorizeAttribute>().AsImplementedInterfaces();
+            var container = builder.Build();
+            SetupMockLifetimeScopeProvider(container);
+            var provider = new AutofacFilterProvider();
+
+            var filters = provider.GetFilters(this._baseControllerContext, this._reflectedActionDescriptor).ToList();
+            Assert.Equal(0, filters.Count);
+        }
+
+        private static void SetupMockLifetimeScopeProvider(ILifetimeScope container)
         {
             var resolver = new AutofacDependencyResolver(container, new StubLifetimeScopeProvider(container));
             DependencyResolver.SetResolver(resolver);

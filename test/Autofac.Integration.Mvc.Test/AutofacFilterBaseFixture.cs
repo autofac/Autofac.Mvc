@@ -1,296 +1,203 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using System.Web.Mvc;
-using System.Web.Mvc.Async;
 using Autofac.Builder;
-using Autofac.Integration.Mvc;
-using Moq;
-using NUnit.Framework;
+using Xunit;
 
 namespace Autofac.Integration.Mvc.Test
 {
-    [TestFixture]
-    public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType>
+    public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> : IClassFixture<AutofacFilterTestContext>
         where TFilter1 : new()
         where TFilter2 : new()
     {
-        ControllerContext _baseControllerContext;
-        ControllerContext _derivedControllerContext;
-        ControllerContext _mostDerivedControllerContext;
-        ControllerDescriptor _controllerDescriptor;
-
-        MethodInfo _baseMethodInfo;
-        MethodInfo _derivedMethodInfo;
-        MethodInfo _mostDerivedMethodInfo;
-        string _actionName;
-
-        ReflectedActionDescriptor _reflectedActionDescriptor;
-        ReflectedAsyncActionDescriptor _reflectedAsyncActionDescriptor;
-        TaskAsyncActionDescriptor _taskAsyncActionDescriptor;
-        ReflectedActionDescriptor _derivedActionDescriptor;
-        ReflectedActionDescriptor _mostDerivedActionDescriptor;
-
-        [TestFixtureSetUp]
-        public void FixtureSetUp()
+        public AutofacFilterBaseFixture(AutofacFilterTestContext testContext)
         {
-            _baseControllerContext = new ControllerContext { Controller = new TestController() };
-            _derivedControllerContext = new ControllerContext { Controller = new TestControllerA() };
-            _mostDerivedControllerContext = new ControllerContext { Controller = new TestControllerB() };
-
-            _baseMethodInfo = TestController.GetAction1MethodInfo<TestController>();
-            _derivedMethodInfo = TestController.GetAction1MethodInfo<TestControllerA>();
-            _mostDerivedMethodInfo = TestController.GetAction1MethodInfo<TestControllerB>();
-            _actionName = _baseMethodInfo.Name;
-
-            _controllerDescriptor = new Mock<ControllerDescriptor>().Object;
-            _reflectedActionDescriptor = new ReflectedActionDescriptor(_baseMethodInfo, _actionName, _controllerDescriptor);
-            _reflectedAsyncActionDescriptor = new ReflectedAsyncActionDescriptor(_baseMethodInfo, _baseMethodInfo, _actionName, _controllerDescriptor);
-            _taskAsyncActionDescriptor = new TaskAsyncActionDescriptor(_baseMethodInfo, _actionName, _controllerDescriptor);
-            _derivedActionDescriptor = new ReflectedActionDescriptor(_derivedMethodInfo, _actionName, _controllerDescriptor);
-            _mostDerivedActionDescriptor = new ReflectedActionDescriptor(_mostDerivedMethodInfo, _actionName, _controllerDescriptor);
+            this.TestContext = testContext;
         }
 
-        [Test]
-        public void ResolvesControllerScopedFilterForReflectedActionDescriptor()
-        {
-            AssertSingleFilter(
-                FilterScope.Controller,
-                _reflectedActionDescriptor,
-                ConfigureFirstControllerRegistration());
-        }
+        public AutofacFilterTestContext TestContext { get; private set; }
 
-        [Test]
-        public void ResolvesActionScopedFilterForReflectedActionDescriptor()
-        {
-            AssertSingleFilter(
-                FilterScope.Action,
-                _reflectedActionDescriptor,
-                ConfigureFirstActionRegistration());
-        }
-
-        [Test]
-        public void ResolvesActionScopedFilterForReflectedAsyncActionDescriptor()
-        {
-            AssertSingleFilter(
-                FilterScope.Action,
-                _reflectedAsyncActionDescriptor,
-                ConfigureFirstActionRegistration());
-        }
-
-        [Test]
-        public void ResolvesActionScopedFilterForTaskAsyncActionDescriptor()
-        {
-            AssertSingleFilter(
-                FilterScope.Action,
-                _taskAsyncActionDescriptor,
-                ConfigureFirstActionRegistration());
-        }
-
-        [Test]
+        [Fact]
         public void ResolvesActionScopedFilterForImmediateBaseContoller()
         {
             AssertSingleFilter(
                 FilterScope.Action,
-                _derivedActionDescriptor,
-                ConfigureFirstActionRegistration(),
-                _derivedControllerContext);
+                this.TestContext.DerivedActionDescriptor,
+                this.ConfigureFirstActionRegistration(),
+                this.TestContext.DerivedControllerContext);
         }
 
-        [Test]
+        [Fact]
         public void ResolvesActionScopedFilterForMostBaseContoller()
         {
             AssertSingleFilter(
                 FilterScope.Action,
-                _mostDerivedActionDescriptor,
-                ConfigureFirstActionRegistration(),
-                _mostDerivedControllerContext);
+                this.TestContext.MostDerivedActionDescriptor,
+                this.ConfigureFirstActionRegistration(),
+                this.TestContext.MostDerivedControllerContext);
         }
 
-        [Test]
-        public void ResolvesMultipleControllerScopedFilters()
+        [Fact]
+        public void ResolvesActionScopedFilterForReflectedActionDescriptor()
         {
-            AssertMultipleFilters(
-                FilterScope.Controller,
-                ConfigureFirstControllerRegistration(),
-                ConfigureSecondControllerRegistration());
-        }
-
-        [Test]
-        public void ResolvesMultipleActionScopedFilters()
-        {
-            AssertMultipleFilters(
+            this.AssertSingleFilter(
                 FilterScope.Action,
-                ConfigureFirstActionRegistration(),
-                ConfigureSecondActionRegistration());
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureFirstActionRegistration());
         }
 
-        [Test]
-        public void ResolvesControllerScopedOverrideFilter()
+        [Fact]
+        public void ResolvesActionScopedFilterForReflectedAsyncActionDescriptor()
         {
-            AssertOverrideFilter(
-                _reflectedActionDescriptor,
-                ConfigureControllerFilterOverride());
+            this.AssertSingleFilter(
+                FilterScope.Action,
+                this.TestContext.ReflectedAsyncActionDescriptor,
+                this.ConfigureFirstActionRegistration());
         }
 
-        [Test]
-        public void ResolvesActionScopedOverrideFilterForReflectedActionDescriptor()
+        [Fact]
+        public void ResolvesActionScopedFilterForTaskAsyncActionDescriptor()
         {
-            AssertOverrideFilter(
-                _reflectedActionDescriptor,
-                ConfigureActionFilterOverride());
+            this.AssertSingleFilter(
+                FilterScope.Action,
+                this.TestContext.TaskAsyncActionDescriptor,
+                this.ConfigureFirstActionRegistration());
         }
 
-        [Test]
-        public void ResolvesActionScopedOverrideFilterForReflectedAsyncActionDescriptor()
-        {
-            AssertOverrideFilter(
-                _reflectedAsyncActionDescriptor,
-                ConfigureActionFilterOverride());
-        }
-
-        [Test]
-        public void ResolvesActionScopedOverrideFilterForTaskAsyncActionDescriptor()
-        {
-            AssertOverrideFilter(
-                _taskAsyncActionDescriptor,
-                ConfigureActionFilterOverride());
-        }
-
-        [Test]
+        [Fact]
         public void ResolvesActionScopedOverrideFilterForImmediateBaseContoller()
         {
             AssertOverrideFilter(
-                _reflectedActionDescriptor,
-                ConfigureActionFilterOverride(),
-                _derivedControllerContext);
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureActionFilterOverride(),
+                this.TestContext.DerivedControllerContext);
         }
 
-        [Test]
+        [Fact]
         public void ResolvesActionScopedOverrideFilterForMostBaseContoller()
         {
             AssertOverrideFilter(
-                _reflectedActionDescriptor,
-                ConfigureActionFilterOverride(),
-                _mostDerivedControllerContext);
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureActionFilterOverride(),
+                this.TestContext.MostDerivedControllerContext);
         }
 
-        [Test]
+        [Fact]
+        public void ResolvesActionScopedOverrideFilterForReflectedActionDescriptor()
+        {
+            this.AssertOverrideFilter(
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureActionFilterOverride());
+        }
+
+        [Fact]
+        public void ResolvesActionScopedOverrideFilterForReflectedAsyncActionDescriptor()
+        {
+            this.AssertOverrideFilter(
+                this.TestContext.ReflectedAsyncActionDescriptor,
+                this.ConfigureActionFilterOverride());
+        }
+
+        [Fact]
+        public void ResolvesActionScopedOverrideFilterForTaskAsyncActionDescriptor()
+        {
+            this.AssertOverrideFilter(
+                this.TestContext.TaskAsyncActionDescriptor,
+                this.ConfigureActionFilterOverride());
+        }
+
+        [Fact]
+        public void ResolvesControllerScopedFilterForReflectedActionDescriptor()
+        {
+            this.AssertSingleFilter(
+                FilterScope.Controller,
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureFirstControllerRegistration());
+        }
+
+        [Fact]
+        public void ResolvesControllerScopedOverrideFilter()
+        {
+            this.AssertOverrideFilter(
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureControllerFilterOverride());
+        }
+
+        [Fact]
         public void ResolvesControllerScopedOverrideFilterForImmediateBaseContoller()
         {
             AssertOverrideFilter(
-                _reflectedActionDescriptor,
-                ConfigureControllerFilterOverride(),
-                _derivedControllerContext);
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureControllerFilterOverride(),
+                this.TestContext.DerivedControllerContext);
         }
 
-        [Test]
+        [Fact]
         public void ResolvesControllerScopedOverrideFilterForMostBaseContoller()
         {
             AssertOverrideFilter(
-                _reflectedActionDescriptor,
-                ConfigureControllerFilterOverride(),
-                _mostDerivedControllerContext);
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureControllerFilterOverride(),
+                this.TestContext.MostDerivedControllerContext);
         }
 
-        [Test]
+        [Fact]
+        public void ResolvesMultipleActionScopedFilters()
+        {
+            this.AssertMultipleFilters(
+                FilterScope.Action,
+                this.ConfigureFirstActionRegistration(),
+                this.ConfigureSecondActionRegistration());
+        }
+
+        [Fact]
+        public void ResolvesMultipleControllerScopedFilters()
+        {
+            this.AssertMultipleFilters(
+                FilterScope.Controller,
+                this.ConfigureFirstControllerRegistration(),
+                this.ConfigureSecondControllerRegistration());
+        }
+
+        [Fact]
         public void ResolvesRegisteredActionFilterOverrideForAction()
         {
-            AssertFilterOverrideRegistration(
+            this.AssertFilterOverrideRegistration(
                 FilterScope.Action,
-                _reflectedActionDescriptor,
-                ConfigureActionOverrideRegistration(),
-                _baseControllerContext);
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureActionOverrideRegistration(),
+                this.TestContext.BaseControllerContext);
         }
 
-        [Test]
+        [Fact]
         public void ResolvesRegisteredActionFilterOverrideForController()
         {
-            AssertFilterOverrideRegistration(
+            this.AssertFilterOverrideRegistration(
                 FilterScope.Controller,
-                _reflectedActionDescriptor,
-                ConfigureControllerOverrideRegistration(),
-                _baseControllerContext);
+                this.TestContext.ReflectedActionDescriptor,
+                this.ConfigureControllerOverrideRegistration(),
+                this.TestContext.BaseControllerContext);
         }
-
-        protected abstract Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstControllerRegistration();
-
-        protected abstract Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstActionRegistration();
-
-        protected abstract Action<IRegistrationBuilder<TFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondControllerRegistration();
-
-        protected abstract Action<IRegistrationBuilder<TFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondActionRegistration();
-
-        protected abstract Action<ContainerBuilder> ConfigureControllerFilterOverride();
 
         protected abstract Action<ContainerBuilder> ConfigureActionFilterOverride();
 
         protected abstract Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> ConfigureActionOverrideRegistration();
 
+        protected abstract Action<ContainerBuilder> ConfigureControllerFilterOverride();
+
         protected abstract Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> ConfigureControllerOverrideRegistration();
+
+        protected abstract Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstActionRegistration();
+
+        protected abstract Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstControllerRegistration();
+
+        protected abstract Action<IRegistrationBuilder<TFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondActionRegistration();
+
+        protected abstract Action<IRegistrationBuilder<TFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondControllerRegistration();
 
         protected abstract Type GetWrapperType();
 
-        static void SetupMockLifetimeScopeProvider(ILifetimeScope container)
-        {
-            var resolver = new AutofacDependencyResolver(container, new StubLifetimeScopeProvider(container));
-            DependencyResolver.SetResolver(resolver);
-        }
-
-        void AssertSingleFilter(FilterScope filterScope, ActionDescriptor actionDescriptor,
-            Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> configure)
-        {
-            AssertSingleFilter(filterScope, actionDescriptor, configure, _baseControllerContext);
-        }
-
-        static void AssertSingleFilter(FilterScope filterScope, ActionDescriptor actionDescriptor,
-            Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> configure,
-            ControllerContext controllerContext)
-        {
-            var builder = new ContainerBuilder();
-            configure(builder.Register(c => new TFilter1()));
-            var container = builder.Build();
-            SetupMockLifetimeScopeProvider(container);
-            var provider = new AutofacFilterProvider();
-
-            var filters = provider.GetFilters(controllerContext, actionDescriptor).ToList();
-
-            Assert.That(filters, Has.Count.EqualTo(1));
-            Assert.That(filters[0].Instance, Is.InstanceOf<TFilter1>());
-            Assert.That(filters[0].Scope, Is.EqualTo(filterScope));
-        }
-
-        void AssertMultipleFilters(FilterScope filterScope,
-            Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> configure1,
-            Action<IRegistrationBuilder<TFilter2, SimpleActivatorData, SingleRegistrationStyle>> configure2)
-        {
-            var builder = new ContainerBuilder();
-            configure1(builder.Register(c => new TFilter1()));
-            configure2(builder.Register(c => new TFilter2()));
-            var container = builder.Build();
-            SetupMockLifetimeScopeProvider(container);
-            var actionDescriptor = new ReflectedActionDescriptor(_baseMethodInfo, _actionName, _controllerDescriptor);
-            var provider = new AutofacFilterProvider();
-
-            var filters = provider.GetFilters(_baseControllerContext, actionDescriptor).ToList();
-
-            Assert.That(filters, Has.Count.EqualTo(2));
-
-            var filter = filters.Single(f => f.Instance is TFilter1);
-            Assert.That(filter.Scope, Is.EqualTo(filterScope));
-            Assert.That(filter.Order, Is.EqualTo(Filter.DefaultOrder));
-
-            filter = filters.Single(f => f.Instance is TFilter2);
-            Assert.That(filter.Scope, Is.EqualTo(filterScope));
-            Assert.That(filter.Order, Is.EqualTo(20));
-        }
-
-        void AssertOverrideFilter(ActionDescriptor actionDescriptor, Action<ContainerBuilder> registration)
-        {
-            AssertOverrideFilter(actionDescriptor, registration, _baseControllerContext);
-        }
-
-        static void AssertOverrideFilter(ActionDescriptor actionDescriptor,
+        private static void AssertOverrideFilter(ActionDescriptor actionDescriptor,
             Action<ContainerBuilder> registration, ControllerContext controllerContext)
         {
             var builder = new ContainerBuilder();
@@ -302,11 +209,11 @@ namespace Autofac.Integration.Mvc.Test
             var filters = provider.GetFilters(controllerContext, actionDescriptor).ToList();
 
             var filter = filters.Select(info => info.Instance).OfType<AutofacOverrideFilter>().Single();
-            Assert.That(filter, Is.InstanceOf<AutofacOverrideFilter>());
-            Assert.That(filter.FiltersToOverride, Is.EqualTo(typeof(TFilterType)));
+            Assert.IsType<AutofacOverrideFilter>(filter);
+            Assert.Equal(typeof(TFilterType), filter.FiltersToOverride);
         }
 
-        void AssertFilterOverrideRegistration(FilterScope filterScope, ActionDescriptor actionDescriptor,
+        private static void AssertSingleFilter(FilterScope filterScope, ActionDescriptor actionDescriptor,
             Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> configure,
             ControllerContext controllerContext)
         {
@@ -318,9 +225,68 @@ namespace Autofac.Integration.Mvc.Test
 
             var filters = provider.GetFilters(controllerContext, actionDescriptor).ToList();
 
-            Assert.That(filters, Has.Count.EqualTo(1));
-            Assert.That(filters[0].Instance, Is.InstanceOf(GetWrapperType()));
-            Assert.That(filters[0].Scope, Is.EqualTo(filterScope));
+            Assert.Equal(1, filters.Count);
+            Assert.IsType<TFilter1>(filters[0].Instance);
+            Assert.Equal(filterScope, filters[0].Scope);
+        }
+
+        private static void SetupMockLifetimeScopeProvider(ILifetimeScope container)
+        {
+            var resolver = new AutofacDependencyResolver(container, new StubLifetimeScopeProvider(container));
+            DependencyResolver.SetResolver(resolver);
+        }
+
+        private void AssertFilterOverrideRegistration(FilterScope filterScope, ActionDescriptor actionDescriptor,
+            Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> configure,
+            ControllerContext controllerContext)
+        {
+            var builder = new ContainerBuilder();
+            configure(builder.Register(c => new TFilter1()));
+            var container = builder.Build();
+            SetupMockLifetimeScopeProvider(container);
+            var provider = new AutofacFilterProvider();
+
+            var filters = provider.GetFilters(controllerContext, actionDescriptor).ToList();
+
+            Assert.Equal(1, filters.Count);
+            Assert.IsType(this.GetWrapperType(), filters[0].Instance);
+            Assert.Equal(filterScope, filters[0].Scope);
+        }
+
+        private void AssertMultipleFilters(FilterScope filterScope,
+            Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> configure1,
+            Action<IRegistrationBuilder<TFilter2, SimpleActivatorData, SingleRegistrationStyle>> configure2)
+        {
+            var builder = new ContainerBuilder();
+            configure1(builder.Register(c => new TFilter1()));
+            configure2(builder.Register(c => new TFilter2()));
+            var container = builder.Build();
+            SetupMockLifetimeScopeProvider(container);
+            var actionDescriptor = new ReflectedActionDescriptor(this.TestContext.BaseMethodInfo, this.TestContext.ActionName, this.TestContext.ControllerDescriptor);
+            var provider = new AutofacFilterProvider();
+
+            var filters = provider.GetFilters(this.TestContext.BaseControllerContext, actionDescriptor).ToList();
+
+            Assert.Equal(2, filters.Count);
+
+            var filter = filters.Single(f => f.Instance is TFilter1);
+            Assert.Equal(filterScope, filter.Scope);
+            Assert.Equal(Filter.DefaultOrder, filter.Order);
+
+            filter = filters.Single(f => f.Instance is TFilter2);
+            Assert.Equal(filterScope, filter.Scope);
+            Assert.Equal(20, filter.Order);
+        }
+
+        private void AssertOverrideFilter(ActionDescriptor actionDescriptor, Action<ContainerBuilder> registration)
+        {
+            AssertOverrideFilter(actionDescriptor, registration, this.TestContext.BaseControllerContext);
+        }
+
+        private void AssertSingleFilter(FilterScope filterScope, ActionDescriptor actionDescriptor,
+            Action<IRegistrationBuilder<TFilter1, SimpleActivatorData, SingleRegistrationStyle>> configure)
+        {
+            AssertSingleFilter(filterScope, actionDescriptor, configure, this.TestContext.BaseControllerContext);
         }
     }
 }
