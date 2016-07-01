@@ -26,7 +26,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Security;
 using System.Web.Mvc;
 
 namespace Autofac.Integration.Mvc
@@ -34,12 +33,15 @@ namespace Autofac.Integration.Mvc
     /// <summary>
     /// Autofac implementation of the <see cref="IDependencyResolver"/> interface.
     /// </summary>
-    [SecurityCritical]
     public class AutofacDependencyResolver : IDependencyResolver
     {
-        readonly ILifetimeScope _container;
-        readonly Action<ContainerBuilder> _configurationAction;
-        ILifetimeScopeProvider _lifetimeScopeProvider;
+        private static Func<AutofacDependencyResolver> _resolverAccessor = DefaultResolverAccessor;
+
+        private readonly Action<ContainerBuilder> _configurationAction;
+
+        private readonly ILifetimeScope _container;
+
+        private ILifetimeScopeProvider _lifetimeScopeProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutofacDependencyResolver"/> class.
@@ -47,8 +49,12 @@ namespace Autofac.Integration.Mvc
         /// <param name="container">The container that nested lifetime scopes will be create from.</param>
         public AutofacDependencyResolver(ILifetimeScope container)
         {
-            if (container == null) throw new ArgumentNullException("container");
-            _container = container;
+            if (container == null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            this._container = container;
         }
 
         /// <summary>
@@ -60,8 +66,12 @@ namespace Autofac.Integration.Mvc
         public AutofacDependencyResolver(ILifetimeScope container, Action<ContainerBuilder> configurationAction)
             : this(container)
         {
-            if (configurationAction == null) throw new ArgumentNullException("configurationAction");
-            _configurationAction = configurationAction;
+            if (configurationAction == null)
+            {
+                throw new ArgumentNullException(nameof(configurationAction));
+            }
+
+            this._configurationAction = configurationAction;
         }
 
         /// <summary>
@@ -73,8 +83,12 @@ namespace Autofac.Integration.Mvc
         public AutofacDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider) :
             this(container)
         {
-            if (lifetimeScopeProvider == null) throw new ArgumentNullException("lifetimeScopeProvider");
-            _lifetimeScopeProvider = lifetimeScopeProvider;
+            if (lifetimeScopeProvider == null)
+            {
+                throw new ArgumentNullException(nameof(lifetimeScopeProvider));
+            }
+
+            this._lifetimeScopeProvider = lifetimeScopeProvider;
         }
 
         /// <summary>
@@ -88,8 +102,12 @@ namespace Autofac.Integration.Mvc
         public AutofacDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider, Action<ContainerBuilder> configurationAction)
             : this(container, lifetimeScopeProvider)
         {
-            if (configurationAction == null) throw new ArgumentNullException("configurationAction");
-            _configurationAction = configurationAction;
+            if (configurationAction == null)
+            {
+                throw new ArgumentNullException(nameof(configurationAction));
+            }
+
+            this._configurationAction = configurationAction;
         }
 
         /// <summary>
@@ -99,25 +117,16 @@ namespace Autofac.Integration.Mvc
         {
             get
             {
-                var currentResolver = DependencyResolver.Current;
-                var autofacResolver = currentResolver as AutofacDependencyResolver;
-                if (autofacResolver != null)
-                    return autofacResolver;
-
-                // Issue 351: We can't necessarily cast the current dependency resolver
-                // to AutofacDependencyResolver because diagnostic systems like Glimpse
-                // will wrap/proxy the resolver. Here we check to see if the resolver
-                // has been wrapped with DynamicProxy and unwrap the target if we can.
-
-                var targetType = currentResolver.GetType().GetField("__target");
-                if (targetType != null && targetType.FieldType == typeof(AutofacDependencyResolver))
-                    return (AutofacDependencyResolver)targetType.GetValue(currentResolver);
-
-                throw new InvalidOperationException(string.Format(
-                    CultureInfo.CurrentCulture,
-                    AutofacDependencyResolverResources.AutofacDependencyResolverNotFound,
-                        currentResolver.GetType().FullName, typeof(AutofacDependencyResolver).FullName));
+                return _resolverAccessor();
             }
+        }
+
+        /// <summary>
+        /// Gets the application container that was provided to the constructor.
+        /// </summary>
+        public ILifetimeScope ApplicationContainer
+        {
+            get { return this._container; }
         }
 
         /// <summary>
@@ -127,20 +136,32 @@ namespace Autofac.Integration.Mvc
         {
             get
             {
-                if (_lifetimeScopeProvider == null)
+                if (this._lifetimeScopeProvider == null)
                 {
-                    _lifetimeScopeProvider = new RequestLifetimeScopeProvider(_container);
+                    this._lifetimeScopeProvider = new RequestLifetimeScopeProvider(this._container);
                 }
-                return _lifetimeScopeProvider.GetLifetimeScope(_configurationAction);
+                return this._lifetimeScopeProvider.GetLifetimeScope(this._configurationAction);
             }
         }
 
         /// <summary>
-        /// Gets the application container that was provided to the constructor.
+        /// Sets the mechanism used to locate the current Autofac dependency resolver.
         /// </summary>
-        public ILifetimeScope ApplicationContainer
+        /// <param name="accessor">
+        /// A <see cref="Func{T}"/> that returns an <see cref="AutofacDependencyResolver"/>
+        /// based on the current context. Set this to <see langword="null" /> to return to the
+        /// default behavior.
+        /// </param>
+        public static void SetAutofacDependencyResolverAccessor(Func<AutofacDependencyResolver> accessor)
         {
-            get { return _container; }
+            if (accessor == null)
+            {
+                _resolverAccessor = DefaultResolverAccessor;
+            }
+            else
+            {
+                _resolverAccessor = accessor;
+            }
         }
 
         /// <summary>
@@ -148,10 +169,9 @@ namespace Autofac.Integration.Mvc
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <returns>The single instance if resolved; otherwise, <c>null</c>.</returns>
-        [SecurityCritical]
         public virtual object GetService(Type serviceType)
         {
-            return RequestLifetimeScope.ResolveOptional(serviceType);
+            return this.RequestLifetimeScope.ResolveOptional(serviceType);
         }
 
         /// <summary>
@@ -159,12 +179,46 @@ namespace Autofac.Integration.Mvc
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <returns>The list of instances if any were resolved; otherwise, an empty list.</returns>
-        [SecurityCritical]
         public virtual IEnumerable<object> GetServices(Type serviceType)
         {
             var enumerableServiceType = typeof(IEnumerable<>).MakeGenericType(serviceType);
-            var instance = RequestLifetimeScope.Resolve(enumerableServiceType);
+            var instance = this.RequestLifetimeScope.Resolve(enumerableServiceType);
             return (IEnumerable<object>)instance;
+        }
+
+        /// <summary>
+        /// Default mechanism for locating the current Autofac service resolver.
+        /// </summary>
+        /// <returns>
+        /// The current <see cref="AutofacDependencyResolver"/> if it can be located.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if the current resolver can't be found.
+        /// </exception>
+        private static AutofacDependencyResolver DefaultResolverAccessor()
+        {
+            var currentResolver = DependencyResolver.Current;
+            var autofacResolver = currentResolver as AutofacDependencyResolver;
+            if (autofacResolver != null)
+            {
+                return autofacResolver;
+            }
+
+            // Issue 351: We can't necessarily cast the current dependency resolver
+            // to AutofacDependencyResolver because diagnostic systems like Glimpse
+            // will wrap/proxy the resolver. Here we check to see if the resolver
+            // has been wrapped with DynamicProxy and unwrap the target if we can.
+
+            var targetType = currentResolver.GetType().GetField("__target");
+            if (targetType != null && targetType.FieldType == typeof(AutofacDependencyResolver))
+            {
+                return (AutofacDependencyResolver)targetType.GetValue(currentResolver);
+            }
+
+            throw new InvalidOperationException(string.Format(
+                CultureInfo.CurrentCulture,
+                AutofacDependencyResolverResources.AutofacDependencyResolverNotFound,
+                    currentResolver.GetType().FullName, typeof(AutofacDependencyResolver).FullName));
         }
     }
 }
