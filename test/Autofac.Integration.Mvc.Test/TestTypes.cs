@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 
-namespace Autofac.Tests.Integration.Mvc
+namespace Autofac.Integration.Mvc.Test
 {
     public class TestActionInvoker : IActionInvoker
     {

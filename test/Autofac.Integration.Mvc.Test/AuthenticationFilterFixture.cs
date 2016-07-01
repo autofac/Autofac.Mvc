@@ -3,7 +3,7 @@ using System.Web.Mvc.Filters;
 using Autofac.Builder;
 using Autofac.Integration.Mvc;
 
-namespace Autofac.Tests.Integration.Mvc
+namespace Autofac.Integration.Mvc.Test
 {
     public class AuthenticationFilterFixture : AutofacFilterBaseFixture<TestAuthenticationFilter, TestAuthenticationFilter2, IAuthenticationFilter>
     {

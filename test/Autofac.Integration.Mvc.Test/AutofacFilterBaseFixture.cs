@@ -8,7 +8,7 @@ using Autofac.Integration.Mvc;
 using Moq;
 using NUnit.Framework;
 
-namespace Autofac.Tests.Integration.Mvc
+namespace Autofac.Integration.Mvc.Test
 {
     [TestFixture]
     public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType>
@@ -290,7 +290,7 @@ namespace Autofac.Tests.Integration.Mvc
             AssertOverrideFilter(actionDescriptor, registration, _baseControllerContext);
         }
 
-        static void AssertOverrideFilter(ActionDescriptor actionDescriptor, 
+        static void AssertOverrideFilter(ActionDescriptor actionDescriptor,
             Action<ContainerBuilder> registration, ControllerContext controllerContext)
         {
             var builder = new ContainerBuilder();

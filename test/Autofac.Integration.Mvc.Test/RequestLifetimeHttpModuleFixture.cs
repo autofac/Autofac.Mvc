@@ -3,7 +3,7 @@ using Autofac.Integration.Mvc;
 using Moq;
 using NUnit.Framework;
 
-namespace Autofac.Tests.Integration.Mvc
+namespace Autofac.Integration.Mvc.Test
 {
     [TestFixture]
     public class RequestLifetimeHttpModuleFixture

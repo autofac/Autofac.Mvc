@@ -2,7 +2,7 @@
 using Autofac.Core.Lifetime;
 using Autofac.Integration.Mvc;
 
-namespace Autofac.Tests.Integration.Mvc
+namespace Autofac.Integration.Mvc.Test
 {
     public class StubLifetimeScopeProvider : ILifetimeScopeProvider
     {

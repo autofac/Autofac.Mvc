@@ -7,7 +7,7 @@ using Autofac.Core.Lifetime;
 using Autofac.Integration.Mvc;
 using NUnit.Framework;
 
-namespace Autofac.Tests.Integration.Mvc
+namespace Autofac.Integration.Mvc.Test
 {
     [TestFixture]
     public class AutofacModelBinderProviderFixture
