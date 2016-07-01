@@ -24,7 +24,6 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using System.Security;
 using System.Web.Mvc;
 
 namespace Autofac.Integration.Mvc
@@ -39,7 +38,6 @@ namespace Autofac.Integration.Mvc
     /// container, along with regular parameters.
     /// </para>
     /// </remarks>
-    [SecurityCritical]
     public class ExtensibleActionInvoker : System.Web.Mvc.Async.AsyncControllerActionInvoker
     {
         /// <summary>
@@ -52,12 +50,11 @@ namespace Autofac.Integration.Mvc
         /// <exception cref="System.ArgumentNullException">
         /// Thrown if <paramref name="parameterDescriptor" /> is <see langword="null" />.
         /// </exception>
-        [SecurityCritical]
         protected override object GetParameterValue(ControllerContext controllerContext, ParameterDescriptor parameterDescriptor)
         {
             if (parameterDescriptor == null)
             {
-                throw new ArgumentNullException("parameterDescriptor");
+                throw new ArgumentNullException(nameof(parameterDescriptor));
             }
 
             // Issue #430
@@ -76,7 +73,7 @@ namespace Autofac.Integration.Mvc
             // we need to try model binding first. Unfortunately there's no way
             // to determine if default model binding will fail, so we give it
             // a shot and handle what we can.
-            object value = null;
+            var value = (object)null;
             try
             {
                 value = base.GetParameterValue(controllerContext, parameterDescriptor);

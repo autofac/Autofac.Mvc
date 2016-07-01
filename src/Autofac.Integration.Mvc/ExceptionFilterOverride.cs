@@ -24,32 +24,28 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using System.Security;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 
 namespace Autofac.Integration.Mvc
 {
-    [SecurityCritical]
     internal class ExceptionFilterOverride : IExceptionFilter, IOverrideFilter
     {
-        readonly IExceptionFilter _wrappedFilter;
+        private readonly IExceptionFilter _wrappedFilter;
 
         public ExceptionFilterOverride(IExceptionFilter wrappedFilter)
         {
-            _wrappedFilter = wrappedFilter;
+            this._wrappedFilter = wrappedFilter;
         }
 
         public Type FiltersToOverride
         {
-            [SecurityCritical]
             get { return typeof(IExceptionFilter); }
         }
 
-        [SecurityCritical]
         public void OnException(ExceptionContext filterContext)
         {
-            _wrappedFilter.OnException(filterContext);
+            this._wrappedFilter.OnException(filterContext);
         }
     }
 }

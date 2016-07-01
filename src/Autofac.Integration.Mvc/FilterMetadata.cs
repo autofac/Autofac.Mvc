@@ -26,7 +26,6 @@
 using System;
 using System.ComponentModel;
 using System.Reflection;
-using System.Security;
 using System.Web.Mvc;
 
 namespace Autofac.Integration.Mvc
@@ -34,7 +33,6 @@ namespace Autofac.Integration.Mvc
     /// <summary>
     /// Metadata interface for filter registrations.
     /// </summary>
-    [SecurityCritical]
     internal class FilterMetadata
     {
         /// <summary>

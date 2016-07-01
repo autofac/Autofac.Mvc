@@ -24,7 +24,6 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using System.Security;
 using System.Web.Mvc.Filters;
 
 namespace Autofac.Integration.Mvc
@@ -32,18 +31,16 @@ namespace Autofac.Integration.Mvc
     /// <summary>
     /// Allows other filters to be overriden at the control and action level.
     /// </summary>
-    [SecurityCritical]
     internal class AutofacOverrideFilter : IOverrideFilter
     {
         public AutofacOverrideFilter(Type filtersToOverride)
         {
-            FiltersToOverride = filtersToOverride;
+            this.FiltersToOverride = filtersToOverride;
         }
 
         public Type FiltersToOverride
         {
-            [SecurityCritical]
-            get; 
+            get;
             private set;
         }
     }

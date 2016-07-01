@@ -24,38 +24,33 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using System.Security;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 
 namespace Autofac.Integration.Mvc
 {
-    [SecurityCritical]
     internal class ResultFilterOverride : IResultFilter, IOverrideFilter
     {
-        readonly IResultFilter _wrappedFilter;
+        private readonly IResultFilter _wrappedFilter;
 
         public ResultFilterOverride(IResultFilter wrappedFilter)
         {
-            _wrappedFilter = wrappedFilter;
+            this._wrappedFilter = wrappedFilter;
         }
 
         public Type FiltersToOverride
         {
-            [SecurityCritical]
             get { return typeof(IResultFilter); }
         }
 
-        [SecurityCritical]
-        public void OnResultExecuting(ResultExecutingContext filterContext)
-        {
-            _wrappedFilter.OnResultExecuting(filterContext);
-        }
-
-        [SecurityCritical]
         public void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            _wrappedFilter.OnResultExecuted(filterContext);
+            this._wrappedFilter.OnResultExecuted(filterContext);
+        }
+
+        public void OnResultExecuting(ResultExecutingContext filterContext)
+        {
+            this._wrappedFilter.OnResultExecuting(filterContext);
         }
     }
 }
