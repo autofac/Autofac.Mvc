@@ -117,6 +117,8 @@
     <Compile Include="AuthorizationFilterFixture.cs" />
     <Compile Include="AuthenticationFilterFixture.cs" />
     <Compile Include="DependencyResolverReplacementContext.cs" />
+    <Compile Include="ExtensibleActionInvokerPropertyFixture.cs" />
+    <Compile Include="ExtensibleActionInvokerPropertyTestContext.cs" />
     <Compile Include="ExtensibleActionInvokerTestContext.cs" />
     <Compile Include="ResultFilterFixture.cs" />
     <Compile Include="ExceptionFilterFixture.cs" />

@@ -25,6 +25,7 @@
 
 using System;
 using System.Web.Mvc;
+using Autofac.Core;
 
 namespace Autofac.Integration.Mvc
 {
@@ -40,6 +41,27 @@ namespace Autofac.Integration.Mvc
     /// </remarks>
     public class ExtensibleActionInvoker : System.Web.Mvc.Async.AsyncControllerActionInvoker
     {
+        /// <summary>
+        /// If set, this is used to determine which model properties are injected.
+        /// </summary>
+        private readonly IPropertySelector _propertySelector;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtensibleActionInvoker"/> class.
+        /// </summary>
+        public ExtensibleActionInvoker()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtensibleActionInvoker"/> class.
+        /// </summary>
+        /// <param name="propertySelector">The inject property selector.</param>
+        public ExtensibleActionInvoker(IPropertySelector propertySelector)
+        {
+            this._propertySelector = propertySelector;
+        }
+
         /// <summary>
         /// Gets the parameter value.
         /// </summary>
@@ -85,12 +107,18 @@ namespace Autofac.Integration.Mvc
                 // out some other way to model bind it.
             }
 
+            var context = AutofacDependencyResolver.Current.RequestLifetimeScope;
             if (value == null)
             {
                 // We got nothing from the default model binding, so try to
                 // resolve it.
-                var context = AutofacDependencyResolver.Current.RequestLifetimeScope;
                 value = context.ResolveOptional(parameterDescriptor.ParameterType);
+            }
+
+
+            if (this._propertySelector != null && value != null)
+            {
+                context.InjectProperties(value, this._propertySelector);
             }
 
             return value;

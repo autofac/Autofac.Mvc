@@ -2,17 +2,23 @@
 using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
+using Autofac.Core;
 using Moq;
 
 namespace Autofac.Integration.Mvc.Test
 {
-    public class ExtensibleActionInvokerTestContext : DependencyResolverReplacementContext
+    public class ExtensibleActionInvokerPropertyTestContext : DependencyResolverReplacementContext
     {
-        public ExtensibleActionInvokerTestContext()
+        public ExtensibleActionInvokerPropertyTestContext()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<ExtensibleActionInvoker>().As<IActionInvoker>();
+
+            // The difference between this context and the non-property one
+            // is that we have a property selector so we should get properties
+            // populated.
+            builder.RegisterType<ExtensibleActionInvoker>().WithParameter("propertySelector", new DefaultPropertySelector(true)).As<IActionInvoker>();
             builder.Register(c => new ActionDependency()).As<IActionDependency>();
+            builder.RegisterType<ActionDependencyProperty>();
             this.Container = builder.Build();
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(this.Container, new StubLifetimeScopeProvider(this.Container)));

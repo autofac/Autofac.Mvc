@@ -17,7 +17,8 @@ namespace Autofac.Integration.Mvc.Test
         {
             var invoker = this.TestContext.Container.Resolve<IActionInvoker>();
             invoker.InvokeAction(this.TestContext.ControllerContext, "Index");
-            Assert.IsAssignableFrom<ExtensibleActionInvokerTestContext.IActionDependency>(this.TestContext.Controller.Dependency);
+            var dependency = Assert.IsAssignableFrom<ExtensibleActionInvokerTestContext.IActionDependency>(this.TestContext.Controller.Dependency);
+            Assert.Null(dependency.Property);
         }
     }
 }
