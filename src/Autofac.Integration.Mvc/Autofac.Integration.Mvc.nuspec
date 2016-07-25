@@ -14,7 +14,7 @@
     <iconUrl>https://cloud.githubusercontent.com/assets/1156571/13684110/16b8f152-e6bf-11e5-84ae-22c66c6d351a.png</iconUrl>
     <dependencies>
       <dependency id="Autofac" version="[4.0.0-rc3-286,5.0.0)" />
-	  <dependency id="Microsoft.AspNet.Mvc" version="[5.1.0,6.0.0)" />
+      <dependency id="Microsoft.AspNet.Mvc" version="[5.1.0,6.0.0)" />
     </dependencies>
   </metadata>
 </package>
