@@ -12,8 +12,9 @@
     <title>Autofac ASP.NET MVC 5 Integration</title>
     <projectUrl>http://autofac.org</projectUrl>
     <iconUrl>https://cloud.githubusercontent.com/assets/1156571/13684110/16b8f152-e6bf-11e5-84ae-22c66c6d351a.png</iconUrl>
+    <releaseNotes>Release notes are at https://github.com/autofac/Autofac.Mvc/releases</releaseNotes>
     <dependencies>
-      <dependency id="Autofac" version="[4.0.0,5.0.0)" />
+      <dependency id="Autofac" version="[4.0.1,5.0.0)" />
       <dependency id="Microsoft.AspNet.Mvc" version="[5.1.0,6.0.0)" />
     </dependencies>
   </metadata>
