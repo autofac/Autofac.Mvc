@@ -22,6 +22,15 @@ namespace Autofac.Integration.Mvc.Test
         }
 
         [Fact]
+        public void EndLifetimeScopeDoesNotThrowExceptionWhenHttpContextNotAvailable()
+        {
+          var container = new ContainerBuilder().Build();
+          var provider = new RequestLifetimeScopeProvider(container);
+          var ex = Record.Exception(() => provider.EndLifetimeScope());
+          Assert.Null(ex);
+        }
+
+        [Fact]
         public void ProviderRegisteredWithHttpModule()
         {
             var container = new ContainerBuilder().Build();
