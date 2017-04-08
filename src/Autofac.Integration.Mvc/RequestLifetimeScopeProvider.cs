@@ -94,6 +94,9 @@ namespace Autofac.Integration.Mvc
         /// </summary>
         public void EndLifetimeScope()
         {
+            if(HttpContext.Current == null)
+                return;
+
             var lifetimeScope = LifetimeScope;
             if (lifetimeScope != null)
                 lifetimeScope.Dispose();
