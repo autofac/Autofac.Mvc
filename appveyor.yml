@@ -4,6 +4,8 @@ environment:
 
 version: $(package_semantic_version).{build}
 
+skip_tags: true
+
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
