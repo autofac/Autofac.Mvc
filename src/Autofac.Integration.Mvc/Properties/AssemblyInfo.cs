@@ -12,7 +12,7 @@ using Autofac.Integration.Mvc;
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 
-[assembly: AssemblyCompany("Autofac Project - http://autofac.org")]
+[assembly: AssemblyCompany("Autofac Project - https://autofac.org")]
 [assembly: AssemblyProduct("Autofac")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
