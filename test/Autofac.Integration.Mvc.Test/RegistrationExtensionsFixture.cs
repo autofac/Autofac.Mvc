@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 using Autofac.Builder;
@@ -476,6 +477,15 @@ namespace Autofac.Integration.Mvc.Test
             var builder = new ContainerBuilder();
             builder.RegisterFilterProvider();
             builder.RegisterFilterProvider();
+        }
+
+        [Fact]
+        public void RegisterFilterProviderCanSafelyBeCalledInParallel()
+        {
+            FilterProviders.Providers.Add(new FilterAttributeFilterProvider());
+
+            var builder = new ContainerBuilder();
+            Parallel.For(1, 10, c => builder.RegisterFilterProvider());
         }
 
         [Fact]

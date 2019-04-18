@@ -43,6 +43,8 @@ namespace Autofac.Integration.Mvc
     /// </summary>
     public static class RegistrationExtensions
     {
+        private static readonly object providerFilterLock = new object();
+
         /// <summary>
         /// Sets the provided registration to act as an <see cref="IActionFilter"/> for the specified controller.
         /// </summary>
@@ -678,9 +680,11 @@ namespace Autofac.Integration.Mvc
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            foreach (var provider in FilterProviders.Providers.OfType<FilterAttributeFilterProvider>().ToArray())
-            {
-                FilterProviders.Providers.Remove(provider);
+            lock (providerFilterLock) {
+                foreach (var provider in FilterProviders.Providers.OfType<FilterAttributeFilterProvider>().ToArray())
+                {
+                    FilterProviders.Providers.Remove(provider);
+                }
             }
 
             builder.RegisterType<AutofacFilterProvider>()
