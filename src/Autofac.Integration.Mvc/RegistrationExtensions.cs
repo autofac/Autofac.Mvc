@@ -444,27 +444,35 @@ namespace Autofac.Integration.Mvc
 
             return registration
                 .ExternallyOwned()
-                .OnRegistered(e => e.ComponentRegistry.Register(RegistrationBuilder
-                    .ForDelegate((c, p) =>
-                    {
-                        var session = HttpContext.Current.Session;
-                        object result;
-                        lock (session.SyncRoot)
+                .OnRegistered(e =>
+                {
+                  foreach (var service in services)
+                  {
+                    e.ComponentRegistry.Register(RegistrationBuilder
+                        .ForDelegate((c, p) =>
                         {
+                          var session = HttpContext.Current.Session;
+                          object result;
+                          lock (session.SyncRoot)
+                          {
                             result = session[e.ComponentRegistration.Id.ToString()];
                             if (result == null)
                             {
-                                result = c.ResolveComponent(e.ComponentRegistration, p);
-                                session[e.ComponentRegistration.Id.ToString()] = result;
+                              var resolveRequest = new ResolveRequest(service, e.ComponentRegistration, p);
+                              result = c.ResolveComponent(resolveRequest);
+                              session[e.ComponentRegistration.Id.ToString()] = result;
                             }
-                        }
-                        return result;
-                    })
-                    .As(services)
-                    .InstancePerLifetimeScope()
-                    .ExternallyOwned()
-                    .CreateRegistration()));
-        }
+                          }
+
+                          return result;
+                        })
+                        .As(service)
+                        .InstancePerLifetimeScope()
+                        .ExternallyOwned()
+                        .CreateRegistration());
+                  }
+                });
+    }
 
         /// <summary>
         /// Inject an IActionInvoker into the controller's ActionInvoker property.
