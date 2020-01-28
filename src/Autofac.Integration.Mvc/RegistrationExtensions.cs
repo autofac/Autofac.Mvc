@@ -448,7 +448,7 @@ namespace Autofac.Integration.Mvc
                 {
                   foreach (var service in services)
                   {
-                    e.ComponentRegistry.Register(RegistrationBuilder
+                    e.ComponentRegistryBuilder.Register(RegistrationBuilder
                         .ForDelegate((c, p) =>
                         {
                           var session = HttpContext.Current.Session;
