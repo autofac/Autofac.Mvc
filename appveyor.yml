@@ -1,6 +1,6 @@
 environment:
-  package_semantic_version: 5.0.0
-  assembly_semantic_version: 5.0.0
+  package_semantic_version: 6.0.0
+  assembly_semantic_version: 6.0.0
 
 version: $(package_semantic_version).{build}
 

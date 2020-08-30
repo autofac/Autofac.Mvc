@@ -34,6 +34,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 using Autofac.Builder;
 using Autofac.Core;
+using Autofac.Core.Resolving.Pipeline;
 using Autofac.Features.Scanning;
 
 namespace Autofac.Integration.Mvc
@@ -458,7 +459,7 @@ namespace Autofac.Integration.Mvc
                             result = session[e.ComponentRegistration.Id.ToString()];
                             if (result == null)
                             {
-                              var resolveRequest = new ResolveRequest(service, e.ComponentRegistration, p);
+                              var resolveRequest = new ResolveRequest(service, new ServiceRegistration(ServicePipelines.DefaultServicePipeline, e.ComponentRegistration), p);
                               result = c.ResolveComponent(resolveRequest);
                               session[e.ComponentRegistration.Id.ToString()] = result;
                             }
