@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reflection;
-using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Web;
@@ -9,4 +7,3 @@ using Autofac.Integration.Mvc;
 [assembly: PreApplicationStartMethod(typeof(PreApplicationStartCode), "Start")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
-[assembly: AssemblyConfiguration("Release")]

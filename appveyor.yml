@@ -5,26 +5,25 @@ dotnet_csproj:
   patch: true
   file: 'src\**\*.csproj'
 
-version: $(package_semantic_version).{build}
+configuration: Release
+
+image: Visual Studio 2019
+
+environment:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  NUGET_XMLDOC_MODE: skip
 
 skip_tags: true
 
-assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '$(assembly_semantic_version).0'
-  assembly_file_version: '$(appveyor_build_version)'
-  assembly_informational_version: '$(package_semantic_version)-CI-{build}'
+nuget:
+  disable_publish_on_pr: true
 
-configuration: Release
+clone_depth: 1
 
-before_build:
-- nuget restore
+test: off
 
-build:
-  verbosity: minimal
-  publish_nuget: true
-  publish_nuget_symbols: true
+build_script:
+- ps: .\build.ps1
 
 deploy:
 - provider: NuGet
