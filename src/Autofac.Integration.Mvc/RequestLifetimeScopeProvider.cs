@@ -39,7 +39,7 @@ namespace Autofac.Integration.Mvc
     /// </remarks>
     public class RequestLifetimeScopeProvider : ILifetimeScopeProvider
     {
-        readonly ILifetimeScope _container;
+        private readonly ILifetimeScope _container;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestLifetimeScopeProvider"/> class.
@@ -47,8 +47,7 @@ namespace Autofac.Integration.Mvc
         /// <param name="container">The parent container, usually the application container.</param>
         public RequestLifetimeScopeProvider(ILifetimeScope container)
         {
-            if (container == null) throw new ArgumentNullException("container");
-            _container = container;
+            _container = container ?? throw new ArgumentNullException(nameof(container));
             RequestLifetimeHttpModule.SetLifetimeScopeProvider(this);
         }
 
@@ -60,7 +59,7 @@ namespace Autofac.Integration.Mvc
             get { return _container; }
         }
 
-        static ILifetimeScope LifetimeScope
+        private static ILifetimeScope LifetimeScope
         {
             get { return (ILifetimeScope)HttpContext.Current.Items[typeof(ILifetimeScope)]; }
             set { HttpContext.Current.Items[typeof(ILifetimeScope)] = value; }
@@ -83,9 +82,12 @@ namespace Autofac.Integration.Mvc
             if (LifetimeScope == null)
             {
                 if ((LifetimeScope = GetLifetimeScopeCore(configurationAction)) == null)
+                {
                     throw new InvalidOperationException(
                         string.Format(CultureInfo.CurrentCulture, RequestLifetimeScopeProviderResources.NullLifetimeScopeReturned, GetType().FullName));
+                }
             }
+
             return LifetimeScope;
         }
 
@@ -94,12 +96,16 @@ namespace Autofac.Integration.Mvc
         /// </summary>
         public void EndLifetimeScope()
         {
-            if(HttpContext.Current == null)
+            if (HttpContext.Current == null)
+            {
                 return;
+            }
 
             var lifetimeScope = LifetimeScope;
             if (lifetimeScope != null)
+            {
                 lifetimeScope.Dispose();
+            }
         }
 
         /// <summary>

@@ -49,17 +49,17 @@ namespace Autofac.Integration.Mvc
         /// <returns>Registrations providing the service.</returns>
         public IEnumerable<IComponentRegistration> RegistrationsFor(Service service, Func<Service, IEnumerable<ServiceRegistration>> registrationAccessor)
         {
-            var typedService = service as IServiceWithType;
-
-            if (typedService != null && IsSupportedView(typedService.ServiceType))
+            if (service is IServiceWithType typedService && IsSupportedView(typedService.ServiceType))
+            {
                 yield return RegistrationBuilder.ForType(typedService.ServiceType)
                     .PropertiesAutowired()
                     .InstancePerDependency()
                     .CreateRegistration();
+            }
         }
 
         /// <summary>
-        /// Gets whether the registrations provided by this source are 1:1 adapters on top
+        /// Gets a value indicating whether the registrations provided by this source are 1:1 adapters on top
         /// of other components (I.e. like Meta, Func or Owned.)
         /// </summary>
         public bool IsAdapterForIndividualComponents
@@ -67,7 +67,7 @@ namespace Autofac.Integration.Mvc
             get { return false; }
         }
 
-        static bool IsSupportedView(Type serviceType)
+        private static bool IsSupportedView(Type serviceType)
         {
             return serviceType.IsAssignableTo<WebViewPage>()
                 || serviceType.IsAssignableTo<ViewPage>()

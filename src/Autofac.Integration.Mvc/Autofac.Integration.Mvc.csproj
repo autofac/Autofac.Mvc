@@ -18,11 +18,12 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/autofac/Autofac.Mvc</RepositoryUrl>
-    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
+    <NeutralLanguage>en-US</NeutralLanguage>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <CodeAnalysisRuleSet>../../build/Analyzers.ruleset</CodeAnalysisRuleSet>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedAllSources>true</EmbedAllSources>
+    <CodeAnalysisRuleSet>../../build/Analyzers.ruleset</CodeAnalysisRuleSet>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Authors>Autofac Contributors</Authors>
     <Company>Autofac</Company>
@@ -34,9 +35,21 @@
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.1.0" />
+    
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
 
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" Condition="Exists('$(MSBuildThisFileDirectory)../../.git')">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
@@ -46,9 +59,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\..\build\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
     <Reference Include="System.Web" />
     <Compile Update="AutofacDependencyResolverResources.Designer.cs">
       <AutoGen>True</AutoGen>

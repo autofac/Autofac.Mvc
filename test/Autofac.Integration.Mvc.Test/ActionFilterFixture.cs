@@ -13,12 +13,12 @@ namespace Autofac.Integration.Mvc.Test
 
         protected override Action<ContainerBuilder> ConfigureActionFilterOverride()
         {
-            return builder => builder.OverrideActionFilterFor<TestController>(c => c.Action1(default(string)));
+            return builder => builder.OverrideActionFilterFor<TestController>(c => c.Action1(default));
         }
 
         protected override Action<IRegistrationBuilder<TestActionFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureActionOverrideRegistration()
         {
-            return r => r.AsActionFilterOverrideFor<TestController>(c => c.Action1(default(string)));
+            return r => r.AsActionFilterOverrideFor<TestController>(c => c.Action1(default));
         }
 
         protected override Action<ContainerBuilder> ConfigureControllerFilterOverride()
@@ -33,7 +33,7 @@ namespace Autofac.Integration.Mvc.Test
 
         protected override Action<IRegistrationBuilder<TestActionFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstActionRegistration()
         {
-            return r => r.AsActionFilterFor<TestController>(c => c.Action1(default(string)));
+            return r => r.AsActionFilterFor<TestController>(c => c.Action1(default));
         }
 
         protected override Action<IRegistrationBuilder<TestActionFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstControllerRegistration()
@@ -43,7 +43,7 @@ namespace Autofac.Integration.Mvc.Test
 
         protected override Action<IRegistrationBuilder<TestActionFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondActionRegistration()
         {
-            return r => r.AsActionFilterFor<TestController>(c => c.Action1(default(string)), 20);
+            return r => r.AsActionFilterFor<TestController>(c => c.Action1(default), 20);
         }
 
         protected override Action<IRegistrationBuilder<TestActionFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondControllerRegistration()
