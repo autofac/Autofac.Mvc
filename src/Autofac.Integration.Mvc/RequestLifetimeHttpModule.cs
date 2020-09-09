@@ -29,7 +29,7 @@ using System.Web;
 namespace Autofac.Integration.Mvc
 {
     /// <summary>
-    /// An <see cref="IHttpModule"/> and <see cref="ILifetimeScopeProvider"/> implementation 
+    /// An <see cref="IHttpModule"/> and <see cref="ILifetimeScopeProvider"/> implementation
     /// that creates a nested lifetime scope for each HTTP request.
     /// </summary>
     internal class RequestLifetimeHttpModule : IHttpModule
@@ -42,8 +42,8 @@ namespace Autofac.Integration.Mvc
         /// <summary>
         /// Initializes a module and prepares it to handle requests.
         /// </summary>
-        /// <param name="context">An <see cref="T:System.Web.HttpApplication"/> that provides access to the 
-        /// methods, properties, and events common to all application objects within an ASP.NET application</param>
+        /// <param name="context">An <see cref="System.Web.HttpApplication"/> that provides access to the
+        /// methods, properties, and events common to all application objects within an ASP.NET application.</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown if <paramref name="context" /> is <see langword="null" />.
         /// </exception>
@@ -51,13 +51,14 @@ namespace Autofac.Integration.Mvc
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
+
             context.EndRequest += OnEndRequest;
         }
 
         /// <summary>
-        /// Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule"/>.
+        /// Disposes of the resources (other than memory) used by the module that implements <see cref="System.Web.IHttpModule"/>.
         /// </summary>
         public void Dispose()
         {
@@ -65,12 +66,10 @@ namespace Autofac.Integration.Mvc
 
         public static void SetLifetimeScopeProvider(ILifetimeScopeProvider lifetimeScopeProvider)
         {
-            if (lifetimeScopeProvider == null) throw new ArgumentNullException("lifetimeScopeProvider");
-
-            LifetimeScopeProvider = lifetimeScopeProvider;
+            LifetimeScopeProvider = lifetimeScopeProvider ?? throw new ArgumentNullException(nameof(lifetimeScopeProvider));
         }
 
-        static void OnEndRequest(object sender, EventArgs e)
+        private static void OnEndRequest(object sender, EventArgs e)
         {
             if (LifetimeScopeProvider != null)
                 LifetimeScopeProvider.EndLifetimeScope();

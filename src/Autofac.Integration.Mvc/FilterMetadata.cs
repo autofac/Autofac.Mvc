@@ -36,25 +36,25 @@ namespace Autofac.Integration.Mvc
     internal class FilterMetadata
     {
         /// <summary>
-        /// Gets the type of the controller.
+        /// Gets or sets the type of the controller.
         /// </summary>
         [DefaultValue(null)]
         public Type ControllerType { get; set; }
 
         /// <summary>
-        /// Gets the filter scope.
+        /// Gets or sets the filter scope.
         /// </summary>
         [DefaultValue(FilterScope.First)]
         public FilterScope FilterScope { get; set; }
 
         /// <summary>
-        /// Gets the method info.
+        /// Gets or sets the method info.
         /// </summary>
         [DefaultValue(null)]
         public MethodInfo MethodInfo { get; set; }
 
         /// <summary>
-        /// Gets the order in which the filter is applied.
+        /// Gets or sets the order in which the filter is applied.
         /// </summary>
         [DefaultValue(-1)]
         public int Order { get; set; }

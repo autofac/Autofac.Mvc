@@ -39,25 +39,25 @@ namespace Autofac.Integration.Mvc
     /// </summary>
     public class AutofacFilterProvider : FilterAttributeFilterProvider
     {
-        internal static string ActionFilterMetadataKey = "AutofacMvcActionFilter";
+        internal const string ActionFilterMetadataKey = "AutofacMvcActionFilter";
 
-        internal static string ActionFilterOverrideMetadataKey = "AutofacMvcActionFilterOverride";
+        internal const string ActionFilterOverrideMetadataKey = "AutofacMvcActionFilterOverride";
 
-        internal static string AuthenticationFilterMetadataKey = "AutofacMvcAuthenticationFilter";
+        internal const string AuthenticationFilterMetadataKey = "AutofacMvcAuthenticationFilter";
 
-        internal static string AuthenticationFilterOverrideMetadataKey = "AutofacMvcAuthenticationFilterOverride";
+        internal const string AuthenticationFilterOverrideMetadataKey = "AutofacMvcAuthenticationFilterOverride";
 
-        internal static string AuthorizationFilterMetadataKey = "AutofacMvcAuthorizationFilter";
+        internal const string AuthorizationFilterMetadataKey = "AutofacMvcAuthorizationFilter";
 
-        internal static string AuthorizationFilterOverrideMetadataKey = "AutofacMvcAuthorizationFilterOverride";
+        internal const string AuthorizationFilterOverrideMetadataKey = "AutofacMvcAuthorizationFilterOverride";
 
-        internal static string ExceptionFilterMetadataKey = "AutofacMvcExceptionFilter";
+        internal const string ExceptionFilterMetadataKey = "AutofacMvcExceptionFilter";
 
-        internal static string ExceptionFilterOverrideMetadataKey = "AutofacMvcExceptionFilterOverride";
+        internal const string ExceptionFilterOverrideMetadataKey = "AutofacMvcExceptionFilterOverride";
 
-        internal static string ResultFilterMetadataKey = "AutofacMvcResultFilter";
+        internal const string ResultFilterMetadataKey = "AutofacMvcResultFilter";
 
-        internal static string ResultFilterOverrideMetadataKey = "AutofacMvcResultFilterOverride";
+        internal const string ResultFilterOverrideMetadataKey = "AutofacMvcResultFilterOverride";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutofacFilterProvider"/> class.
@@ -65,7 +65,8 @@ namespace Autofac.Integration.Mvc
         /// <remarks>
         /// The <c>false</c> constructor parameter passed to base here ensures that attribute instances are not cached.
         /// </remarks>
-        public AutofacFilterProvider() : base(false)
+        public AutofacFilterProvider()
+            : base(false)
         {
         }
 
@@ -86,6 +87,7 @@ namespace Autofac.Integration.Mvc
             {
                 throw new ArgumentNullException(nameof(controllerContext));
             }
+
             var filters = base.GetFilters(controllerContext, actionDescriptor).ToList();
             var lifetimeScope = AutofacDependencyResolver.Current.RequestLifetimeScope;
 
@@ -103,7 +105,7 @@ namespace Autofac.Integration.Mvc
                     ActionDescriptor = actionDescriptor,
                     LifetimeScope = lifetimeScope,
                     ControllerType = controllerType,
-                    Filters = filters
+                    Filters = filters,
                 };
 
                 ResolveControllerScopedFilters(filterContext);

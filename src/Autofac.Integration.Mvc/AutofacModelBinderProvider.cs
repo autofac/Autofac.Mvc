@@ -39,7 +39,7 @@ namespace Autofac.Integration.Mvc
         /// <summary>
         /// Metadata key for the supported model types.
         /// </summary>
-        internal static readonly string MetadataKey = "SupportedModelTypes";
+        internal const string MetadataKey = "SupportedModelTypes";
 
         /// <summary>
         /// Gets the model binder associated with the provided model type.
@@ -53,7 +53,7 @@ namespace Autofac.Integration.Mvc
             var modelBinder = modelBinders
                 .Where(binder => binder.Metadata.ContainsKey(MetadataKey))
                 .FirstOrDefault(binder => ((List<Type>)binder.Metadata[MetadataKey]).Contains(modelType));
-            return (modelBinder != null) ? modelBinder.Value.Value : null;
+            return modelBinder?.Value.Value;
         }
     }
 }

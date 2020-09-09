@@ -34,6 +34,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 using Autofac.Builder;
 using Autofac.Core;
+using Autofac.Core.Resolving.Pipeline;
 using Autofac.Features.Scanning;
 
 namespace Autofac.Integration.Mvc
@@ -66,9 +67,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsActionFilterFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsActionFilterFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IActionFilter, TController>(registration, AutofacFilterProvider.ActionFilterMetadataKey, actionSelector, order);
         }
@@ -96,9 +99,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsActionFilterOverrideFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsActionFilterOverrideFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IActionFilter, TController>(registration, AutofacFilterProvider.ActionFilterOverrideMetadataKey, actionSelector, order);
         }
@@ -126,9 +131,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsAuthenticationFilterFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsAuthenticationFilterFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IAuthenticationFilter, TController>(registration, AutofacFilterProvider.AuthenticationFilterMetadataKey, actionSelector, order);
         }
@@ -156,9 +163,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsAuthenticationFilterOverrideFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsAuthenticationFilterOverrideFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IAuthenticationFilter, TController>(registration, AutofacFilterProvider.AuthenticationFilterOverrideMetadataKey, actionSelector, order);
         }
@@ -186,9 +195,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsAuthorizationFilterFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsAuthorizationFilterFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IAuthorizationFilter, TController>(registration, AutofacFilterProvider.AuthorizationFilterMetadataKey, actionSelector, order);
         }
@@ -216,9 +227,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsAuthorizationFilterOverrideFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsAuthorizationFilterOverrideFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IAuthorizationFilter, TController>(registration, AutofacFilterProvider.AuthorizationFilterOverrideMetadataKey, actionSelector, order);
         }
@@ -246,9 +259,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsExceptionFilterFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsExceptionFilterFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IExceptionFilter, TController>(registration, AutofacFilterProvider.ExceptionFilterMetadataKey, actionSelector, order);
         }
@@ -276,9 +291,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsExceptionFilterOverrideFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsExceptionFilterOverrideFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IExceptionFilter, TController>(registration, AutofacFilterProvider.ExceptionFilterOverrideMetadataKey, actionSelector, order);
         }
@@ -341,10 +358,12 @@ namespace Autofac.Integration.Mvc
             {
                 throw new ArgumentNullException(nameof(registration));
             }
+
             if (types == null)
             {
                 throw new ArgumentNullException(nameof(types));
             }
+
             var typeList = types.Where(type => type != null).ToList();
             if (typeList.Count == 0)
             {
@@ -377,9 +396,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsResultFilterFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsResultFilterFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IResultFilter, TController>(registration, AutofacFilterProvider.ResultFilterMetadataKey, actionSelector, order);
         }
@@ -407,9 +428,11 @@ namespace Autofac.Integration.Mvc
         /// <param name="order">The order in which the filter is applied.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
-            AsResultFilterOverrideFor<TController>(this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
-                Expression<Action<TController>> actionSelector, int order = Filter.DefaultOrder)
-                    where TController : IController
+            AsResultFilterOverrideFor<TController>(
+                this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+                Expression<Action<TController>> actionSelector,
+                int order = Filter.DefaultOrder)
+            where TController : IController
         {
             return AsFilterFor<IResultFilter, TController>(registration, AutofacFilterProvider.ResultFilterOverrideMetadataKey, actionSelector, order);
         }
@@ -423,8 +446,8 @@ namespace Autofac.Integration.Mvc
         /// other services.
         /// </remarks>
         /// <typeparam name="TLimit">Registration limit type.</typeparam>
-        /// <typeparam name="TSingleRegistrationStyle">Registration style.</typeparam>
         /// <typeparam name="TActivatorData">Activator data type.</typeparam>
+        /// <typeparam name="TSingleRegistrationStyle">Registration style.</typeparam>
         /// <param name="registration">The registration to configure.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "It is the responsibility of the registry to dispose of registrations.")]
@@ -458,7 +481,7 @@ namespace Autofac.Integration.Mvc
                             result = session[e.ComponentRegistration.Id.ToString()];
                             if (result == null)
                             {
-                              var resolveRequest = new ResolveRequest(service, e.ComponentRegistration, p);
+                              var resolveRequest = new ResolveRequest(service, new ServiceRegistration(ServicePipelines.DefaultServicePipeline, e.ComponentRegistration), p);
                               result = c.ResolveComponent(resolveRequest);
                               session[e.ComponentRegistration.Id.ToString()] = result;
                             }
@@ -515,8 +538,7 @@ namespace Autofac.Integration.Mvc
 
             return registrationBuilder.OnActivating(e =>
             {
-                var controller = e.Instance as Controller;
-                if (controller != null)
+                if (e.Instance is Controller controller)
                 {
                     controller.ActionInvoker = (IActionInvoker)e.Context.ResolveService(actionInvokerService);
                 }
@@ -528,8 +550,8 @@ namespace Autofac.Integration.Mvc
         /// HTTP request.
         /// </summary>
         /// <typeparam name="TLimit">Registration limit type.</typeparam>
-        /// <typeparam name="TStyle">Registration style.</typeparam>
         /// <typeparam name="TActivatorData">Activator data type.</typeparam>
+        /// <typeparam name="TStyle">Registration style.</typeparam>
         /// <param name="registration">The registration to configure.</param>
         /// <param name="lifetimeScopeTags">Additional tags applied for matching lifetime scopes.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
@@ -548,7 +570,6 @@ namespace Autofac.Integration.Mvc
         /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
         /// </summary>
         /// <param name="builder">The container builder.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideActionFilterFor<TController>(this ContainerBuilder builder)
                 where TController : IController
         {
@@ -560,7 +581,6 @@ namespace Autofac.Integration.Mvc
         /// </summary>
         /// <param name="builder">The container builder.</param>
         /// <param name="actionSelector">The action selector.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideActionFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
                 where TController : IController
         {
@@ -571,7 +591,6 @@ namespace Autofac.Integration.Mvc
         /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
         /// </summary>
         /// <param name="builder">The container builder.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideAuthenticationFilterFor<TController>(this ContainerBuilder builder)
                 where TController : IController
         {
@@ -583,7 +602,6 @@ namespace Autofac.Integration.Mvc
         /// </summary>
         /// <param name="builder">The container builder.</param>
         /// <param name="actionSelector">The action selector.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideAuthenticationFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
                 where TController : IController
         {
@@ -594,7 +612,6 @@ namespace Autofac.Integration.Mvc
         /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
         /// </summary>
         /// <param name="builder">The container builder.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideAuthorizationFilterFor<TController>(this ContainerBuilder builder)
                 where TController : IController
         {
@@ -606,7 +623,6 @@ namespace Autofac.Integration.Mvc
         /// </summary>
         /// <param name="builder">The container builder.</param>
         /// <param name="actionSelector">The action selector.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideAuthorizationFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
                 where TController : IController
         {
@@ -617,7 +633,6 @@ namespace Autofac.Integration.Mvc
         /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
         /// </summary>
         /// <param name="builder">The container builder.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideExceptionFilterFor<TController>(this ContainerBuilder builder)
                 where TController : IController
         {
@@ -629,7 +644,6 @@ namespace Autofac.Integration.Mvc
         /// </summary>
         /// <param name="builder">The container builder.</param>
         /// <param name="actionSelector">The action selector.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideExceptionFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
                 where TController : IController
         {
@@ -640,7 +654,6 @@ namespace Autofac.Integration.Mvc
         /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
         /// </summary>
         /// <param name="builder">The container builder.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideResultFilterFor<TController>(this ContainerBuilder builder)
                 where TController : IController
         {
@@ -652,7 +665,6 @@ namespace Autofac.Integration.Mvc
         /// </summary>
         /// <param name="builder">The container builder.</param>
         /// <param name="actionSelector">The action selector.</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static void OverrideResultFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
                 where TController : IController
         {
@@ -791,8 +803,11 @@ namespace Autofac.Integration.Mvc
 
             if (!limitType.IsAssignableTo<TFilter>())
             {
-                string message = string.Format(CultureInfo.CurrentCulture, RegistrationExtensionsResources.MustBeAssignableToFilterType,
-                                    limitType.FullName, typeof(TFilter).FullName);
+                string message = string.Format(
+                                    CultureInfo.CurrentCulture,
+                                    RegistrationExtensionsResources.MustBeAssignableToFilterType,
+                                    limitType.FullName,
+                                    typeof(TFilter).FullName);
                 throw new ArgumentException(message, nameof(registration));
             }
 
@@ -801,7 +816,7 @@ namespace Autofac.Integration.Mvc
                 ControllerType = typeof(TController),
                 FilterScope = FilterScope.Controller,
                 MethodInfo = null,
-                Order = order
+                Order = order,
             };
 
             return registration.As<TFilter>().WithMetadata(metadataKey, metadata);
@@ -825,8 +840,12 @@ namespace Autofac.Integration.Mvc
 
             if (!limitType.IsAssignableTo<TFilter>())
             {
-                string message = string.Format(CultureInfo.CurrentCulture, RegistrationExtensionsResources.MustBeAssignableToFilterType,
-                                    limitType.FullName, typeof(TFilter).FullName);
+                string message = string.Format(
+                                    CultureInfo.CurrentCulture,
+                                    RegistrationExtensionsResources.MustBeAssignableToFilterType,
+                                    limitType.FullName,
+                                    typeof(TFilter).FullName);
+
                 throw new ArgumentException(message, nameof(registration));
             }
 
@@ -835,7 +854,7 @@ namespace Autofac.Integration.Mvc
                 ControllerType = typeof(TController),
                 FilterScope = FilterScope.Action,
                 MethodInfo = GetMethodInfo(actionSelector),
-                Order = order
+                Order = order,
             };
 
             return registration.As<TFilter>().WithMetadata(metadataKey, metadata);
@@ -847,7 +866,7 @@ namespace Autofac.Integration.Mvc
             {
                 ControllerType = typeof(TController),
                 FilterScope = FilterScope.Controller,
-                MethodInfo = null
+                MethodInfo = null,
             };
 
             builder.RegisterInstance(new AutofacOverrideFilter(typeof(TFilter)))
@@ -866,7 +885,7 @@ namespace Autofac.Integration.Mvc
             {
                 ControllerType = typeof(TController),
                 FilterScope = FilterScope.Action,
-                MethodInfo = GetMethodInfo(actionSelector)
+                MethodInfo = GetMethodInfo(actionSelector),
             };
 
             builder.RegisterInstance(new AutofacOverrideFilter(typeof(TFilter)))

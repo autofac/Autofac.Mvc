@@ -17,7 +17,7 @@ namespace Autofac.Integration.Mvc.Test
             AssertFilterRegistration<TestActionFilter, IActionFilter>(
                 FilterScope.Action,
                 TestController.GetAction1MethodInfo<TestController>(),
-                r => r.AsActionFilterFor<TestController>(c => c.Action1(default(string)), 20),
+                r => r.AsActionFilterFor<TestController>(c => c.Action1(default), 20),
                 AutofacFilterProvider.ActionFilterMetadataKey);
         }
 
@@ -26,7 +26,7 @@ namespace Autofac.Integration.Mvc.Test
         {
             var exception = Assert.Throws<ArgumentNullException>(
                 () => Autofac.Integration.Mvc.RegistrationExtensions.AsActionFilterFor<TestController>
-                    (null, c => c.Action1(default(string))));
+                    (null, c => c.Action1(default)));
 
             Assert.Equal("registration", exception.ParamName);
         }
@@ -76,7 +76,7 @@ namespace Autofac.Integration.Mvc.Test
             AssertFilterRegistration<TestAuthenticationFilter, IAuthenticationFilter>(
                 FilterScope.Action,
                 TestController.GetAction1MethodInfo<TestController>(),
-                r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default(string)), 20),
+                r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default), 20),
                 AutofacFilterProvider.AuthenticationFilterMetadataKey);
         }
 
@@ -85,7 +85,7 @@ namespace Autofac.Integration.Mvc.Test
         {
             var exception = Assert.Throws<ArgumentNullException>(
                 () => Autofac.Integration.Mvc.RegistrationExtensions.AsAuthenticationFilterFor<TestController>
-                    (null, c => c.Action1(default(string))));
+                    (null, c => c.Action1(default)));
 
             Assert.Equal("registration", exception.ParamName);
         }
@@ -135,7 +135,7 @@ namespace Autofac.Integration.Mvc.Test
             AssertFilterRegistration<TestAuthorizationFilter, IAuthorizationFilter>(
                 FilterScope.Action,
                 TestController.GetAction1MethodInfo<TestController>(),
-                r => r.AsAuthorizationFilterFor<TestController>(c => c.Action1(default(string)), 20),
+                r => r.AsAuthorizationFilterFor<TestController>(c => c.Action1(default), 20),
                 AutofacFilterProvider.AuthorizationFilterMetadataKey);
         }
 
@@ -144,7 +144,7 @@ namespace Autofac.Integration.Mvc.Test
         {
             var exception = Assert.Throws<ArgumentNullException>(
                 () => Autofac.Integration.Mvc.RegistrationExtensions.AsAuthorizationFilterFor<TestController>
-                    (null, c => c.Action1(default(string))));
+                    (null, c => c.Action1(default)));
 
             Assert.Equal("registration", exception.ParamName);
         }
@@ -194,7 +194,7 @@ namespace Autofac.Integration.Mvc.Test
             AssertFilterRegistration<TestExceptionFilter, IExceptionFilter>(
                 FilterScope.Action,
                 TestController.GetAction1MethodInfo<TestController>(),
-                r => r.AsExceptionFilterFor<TestController>(c => c.Action1(default(string)), 20),
+                r => r.AsExceptionFilterFor<TestController>(c => c.Action1(default), 20),
                 AutofacFilterProvider.ExceptionFilterMetadataKey);
         }
 
@@ -203,7 +203,7 @@ namespace Autofac.Integration.Mvc.Test
         {
             var exception = Assert.Throws<ArgumentNullException>(
                 () => Autofac.Integration.Mvc.RegistrationExtensions.AsExceptionFilterFor<TestController>
-                    (null, c => c.Action1(default(string))));
+                    (null, c => c.Action1(default)));
 
             Assert.Equal("registration", exception.ParamName);
         }
@@ -328,7 +328,7 @@ namespace Autofac.Integration.Mvc.Test
             AssertFilterRegistration<TestResultFilter, IResultFilter>(
                 FilterScope.Action,
                 TestController.GetAction1MethodInfo<TestController>(),
-                r => r.AsResultFilterFor<TestController>(c => c.Action1(default(string)), 20),
+                r => r.AsResultFilterFor<TestController>(c => c.Action1(default), 20),
                 AutofacFilterProvider.ResultFilterMetadataKey);
         }
 
@@ -337,7 +337,7 @@ namespace Autofac.Integration.Mvc.Test
         {
             var exception = Assert.Throws<ArgumentNullException>(
                 () => Autofac.Integration.Mvc.RegistrationExtensions.AsResultFilterFor<TestController>
-                    (null, c => c.Action1(default(string))));
+                    (null, c => c.Action1(default)));
 
             Assert.Equal("registration", exception.ParamName);
         }

@@ -47,8 +47,7 @@ namespace Autofac.Integration.Mvc
         /// <param name="targetTypes">The target types.</param>
         public ModelBinderTypeAttribute(params Type[] targetTypes)
         {
-            if (targetTypes == null) throw new ArgumentNullException("targetTypes");
-            TargetTypes = targetTypes;
+            TargetTypes = targetTypes ?? throw new ArgumentNullException(nameof(targetTypes));
         }
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace Autofac.Integration.Mvc
         /// <param name="targetType">The target type.</param>
         public ModelBinderTypeAttribute(Type targetType)
         {
-            if (targetType == null) throw new ArgumentNullException("targetType");
+            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
             TargetTypes = new Type[] { targetType };
         }
     }
