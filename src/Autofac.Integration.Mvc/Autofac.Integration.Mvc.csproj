@@ -9,8 +9,7 @@
     <AssemblyName>Autofac.Integration.Mvc</AssemblyName>
     <AssemblyOriginatorKeyFile>../../Autofac.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-    <PackageId>Autofac.Integration.Mvc</PackageId>
+    <PackageId>Autofac.Mvc5</PackageId>
     <PackageTags>autofac;di;ioc;dependencyinjection</PackageTags>
     <PackageReleaseNotes>Release notes are at https://github.com/autofac/Autofac.Mvc/releases</PackageReleaseNotes>
     <PackageIcon>icon.png</PackageIcon>
@@ -23,7 +22,6 @@
     <CodeAnalysisRuleSet>../../build/Analyzers.ruleset</CodeAnalysisRuleSet>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedAllSources>true</EmbedAllSources>
-    <CodeAnalysisRuleSet>../../build/Analyzers.ruleset</CodeAnalysisRuleSet>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Authors>Autofac Contributors</Authors>
     <Company>Autofac</Company>
@@ -35,7 +33,6 @@
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.1.0" />
-
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
@@ -44,11 +41,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
-
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" Condition="Exists('$(MSBuildThisFileDirectory)../../.git')">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
