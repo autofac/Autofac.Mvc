@@ -31,7 +31,7 @@ namespace Autofac.Integration.Mvc
 {
     /// <summary>
     /// Injects services from the container into the ASP.NET MVC invocation pipeline.
-    /// This is a Async Controller Action Invoker which can be used for both async and non-async scenarios
+    /// This is a Async Controller Action Invoker which can be used for both async and non-async scenarios.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -114,7 +114,6 @@ namespace Autofac.Integration.Mvc
                 // resolve it.
                 value = context.ResolveOptional(parameterDescriptor.ParameterType);
             }
-
 
             if (this._propertySelector != null && value != null)
             {

@@ -49,12 +49,7 @@ namespace Autofac.Integration.Mvc
         /// <param name="container">The container that nested lifetime scopes will be create from.</param>
         public AutofacDependencyResolver(ILifetimeScope container)
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
-
-            this._container = container;
+            this._container = container ?? throw new ArgumentNullException(nameof(container));
         }
 
         /// <summary>
@@ -66,12 +61,7 @@ namespace Autofac.Integration.Mvc
         public AutofacDependencyResolver(ILifetimeScope container, Action<ContainerBuilder> configurationAction)
             : this(container)
         {
-            if (configurationAction == null)
-            {
-                throw new ArgumentNullException(nameof(configurationAction));
-            }
-
-            this._configurationAction = configurationAction;
+            this._configurationAction = configurationAction ?? throw new ArgumentNullException(nameof(configurationAction));
         }
 
         /// <summary>
@@ -80,15 +70,10 @@ namespace Autofac.Integration.Mvc
         /// <param name="container">The container that nested lifetime scopes will be create from.</param>
         /// <param name="lifetimeScopeProvider">A <see cref="ILifetimeScopeProvider"/> implementation for
         /// creating new lifetime scopes.</param>
-        public AutofacDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider) :
-            this(container)
+        public AutofacDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider)
+            : this(container)
         {
-            if (lifetimeScopeProvider == null)
-            {
-                throw new ArgumentNullException(nameof(lifetimeScopeProvider));
-            }
-
-            this._lifetimeScopeProvider = lifetimeScopeProvider;
+            this._lifetimeScopeProvider = lifetimeScopeProvider ?? throw new ArgumentNullException(nameof(lifetimeScopeProvider));
         }
 
         /// <summary>
@@ -102,12 +87,7 @@ namespace Autofac.Integration.Mvc
         public AutofacDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider, Action<ContainerBuilder> configurationAction)
             : this(container, lifetimeScopeProvider)
         {
-            if (configurationAction == null)
-            {
-                throw new ArgumentNullException(nameof(configurationAction));
-            }
-
-            this._configurationAction = configurationAction;
+            this._configurationAction = configurationAction ?? throw new ArgumentNullException(nameof(configurationAction));
         }
 
         /// <summary>
@@ -130,7 +110,7 @@ namespace Autofac.Integration.Mvc
         }
 
         /// <summary>
-        /// The lifetime containing components for processing the current HTTP request.
+        /// Gets the lifetime containing components for processing the current HTTP request.
         /// </summary>
         public ILifetimeScope RequestLifetimeScope
         {
@@ -140,6 +120,7 @@ namespace Autofac.Integration.Mvc
                 {
                     this._lifetimeScopeProvider = new RequestLifetimeScopeProvider(this._container);
                 }
+
                 return this._lifetimeScopeProvider.GetLifetimeScope(this._configurationAction);
             }
         }
@@ -198,8 +179,7 @@ namespace Autofac.Integration.Mvc
         private static AutofacDependencyResolver DefaultResolverAccessor()
         {
             var currentResolver = DependencyResolver.Current;
-            var autofacResolver = currentResolver as AutofacDependencyResolver;
-            if (autofacResolver != null)
+            if (currentResolver is AutofacDependencyResolver autofacResolver)
             {
                 return autofacResolver;
             }
@@ -208,7 +188,6 @@ namespace Autofac.Integration.Mvc
             // to AutofacDependencyResolver because diagnostic systems like Glimpse
             // will wrap/proxy the resolver. Here we check to see if the resolver
             // has been wrapped with DynamicProxy and unwrap the target if we can.
-
             var targetType = currentResolver.GetType().GetField("__target");
             if (targetType != null && targetType.FieldType == typeof(AutofacDependencyResolver))
             {
@@ -218,7 +197,8 @@ namespace Autofac.Integration.Mvc
             throw new InvalidOperationException(string.Format(
                 CultureInfo.CurrentCulture,
                 AutofacDependencyResolverResources.AutofacDependencyResolverNotFound,
-                    currentResolver.GetType().FullName, typeof(AutofacDependencyResolver).FullName));
+                currentResolver.GetType().FullName,
+                typeof(AutofacDependencyResolver).FullName));
         }
     }
 }
