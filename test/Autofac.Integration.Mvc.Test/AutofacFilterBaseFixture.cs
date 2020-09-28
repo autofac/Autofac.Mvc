@@ -225,7 +225,7 @@ namespace Autofac.Integration.Mvc.Test
 
             var filters = provider.GetFilters(controllerContext, actionDescriptor).ToList();
 
-            Assert.Equal(1, filters.Count);
+            Assert.Single(filters);
             Assert.IsType<TFilter1>(filters[0].Instance);
             Assert.Equal(filterScope, filters[0].Scope);
         }
@@ -248,7 +248,7 @@ namespace Autofac.Integration.Mvc.Test
 
             var filters = provider.GetFilters(controllerContext, actionDescriptor).ToList();
 
-            Assert.Equal(1, filters.Count);
+            Assert.Single(filters);
             Assert.IsType(this.GetWrapperType(), filters[0].Instance);
             Assert.Equal(filterScope, filters[0].Scope);
         }

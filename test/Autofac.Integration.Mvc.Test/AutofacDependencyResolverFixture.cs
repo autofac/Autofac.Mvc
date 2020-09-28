@@ -55,7 +55,7 @@ namespace Autofac.Integration.Mvc.Test
             var services = resolver.GetServices(typeof(object));
 
             Assert.NotNull(service);
-            Assert.Equal(1, services.Count());
+            Assert.Single(services);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Autofac.Integration.Mvc.Test
             DependencyResolver.SetResolver(resolver);
             Assert.Equal(resolver, AutofacDependencyResolver.Current);
             Assert.NotNull(resolver.GetService(typeof(object)));
-            Assert.Equal(1, resolver.GetServices(typeof(object)).Count());
+            Assert.Single(resolver.GetServices(typeof(object)));
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace Autofac.Integration.Mvc.Test
 
             var services = resolver.GetServices(typeof(object));
 
-            Assert.Equal(0, services.Count());
+            Assert.Empty(services);
         }
 
         [Fact]
@@ -130,7 +130,7 @@ namespace Autofac.Integration.Mvc.Test
 
             var services = resolver.GetServices(typeof(object));
 
-            Assert.Equal(1, services.Count());
+            Assert.Single(services);
         }
 
         [Fact]
