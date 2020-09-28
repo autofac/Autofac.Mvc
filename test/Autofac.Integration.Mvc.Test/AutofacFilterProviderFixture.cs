@@ -57,7 +57,7 @@ namespace Autofac.Integration.Mvc.Test
             var provider = new AutofacFilterProvider();
 
             var filters = provider.GetFilters(this._baseControllerContext, this._reflectedActionDescriptor).ToList();
-            Assert.Equal(0, filters.Count);
+            Assert.Empty(filters);
         }
 
         private static void SetupMockLifetimeScopeProvider(ILifetimeScope container)
