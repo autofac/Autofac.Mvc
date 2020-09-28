@@ -27,15 +27,15 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Authors>Autofac Contributors</Authors>
     <Company>Autofac</Company>
-    <Product>Autofac</Product>    
+    <Product>Autofac</Product>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.0.0-develop-01132" />
+    <PackageReference Include="Autofac" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.1.0" />
-    
+
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
