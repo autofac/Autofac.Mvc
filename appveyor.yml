@@ -13,6 +13,13 @@ environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   NUGET_XMLDOC_MODE: skip
 
+install:
+  - ps: |
+        $path = [Environment]::GetEnvironmentVariable("path", "machine")
+        $newPath = ($path.Split(';') | Where-Object { $_ -eq 'C:\ProgramData\chocolatey\bin' }) -join ';'
+        [Environment]::SetEnvironmentVariable("path", $newPath, "machine")
+  - cmd: appveyor-retry choco install gpg4win
+
 skip_tags: true
 
 nuget:
