@@ -192,6 +192,8 @@ function Invoke-Test {
         foreach ($Project in $ProjectDirectory) {
             Push-Location $Project
 
+            # Xunit AppDomain handling causes problems with net72 and strong-named test assemblies.
+            # https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/KnownIssues.md#tests-fail-if-assembly-is-strong-named
             & dotnet test `
                 --configuration Release `
                 --logger:trx `
@@ -199,7 +201,9 @@ function Invoke-Test {
                 /p:CoverletOutput="../../artifacts/coverage/$($Project.Name)/" `
                 /p:CoverletOutputFormat="json%2clcov" `
                 /p:ExcludeByAttribute=CompilerGeneratedAttribute `
-                /p:ExcludeByAttribute=GeneratedCodeAttribute
+                /p:ExcludeByAttribute=GeneratedCodeAttribute `
+                /p:Exclude="[Microsoft.*]*" `
+                -- RunConfiguration.DisableAppDomain=true
 
             if ($LASTEXITCODE -ne 0) {
                 Pop-Location
