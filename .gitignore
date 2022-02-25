@@ -22,7 +22,7 @@ x64/
 # Visual Studio 2015 cache/options directory
 .dotnet/
 .vs/
-.vscode/
+.cr/
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
@@ -31,6 +31,7 @@ x64/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 *.TestResults.xml
+results/
 
 *_i.c
 *_p.c
@@ -81,6 +82,11 @@ _TeamCity*
 
 # DotCover is a Code Coverage Tool
 *.dotCover
+
+# Coverage
+coverage.*
+codecov.sh
+coverage/
 
 # NCrunch
 *.ncrunch*
@@ -165,3 +171,4 @@ $RECYCLE.BIN/
 .DS_Store
 
 # JetBrains Rider
+.idea

@@ -1,21 +1,19 @@
-﻿using System;
-using System.Web.Mvc;
+﻿// Copyright (c) Autofac Project. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
-namespace Autofac.Integration.Mvc.Test
+namespace Autofac.Integration.Mvc.Test;
+
+public class DependencyResolverReplacementContext : IDisposable
 {
-    public class DependencyResolverReplacementContext : IDisposable
+    private readonly IDependencyResolver _originalResolver;
+
+    public DependencyResolverReplacementContext()
     {
-        private IDependencyResolver _originalResolver;
+        this._originalResolver = DependencyResolver.Current;
+    }
 
-        public DependencyResolverReplacementContext()
-        {
-            this._originalResolver = DependencyResolver.Current;
-
-        }
-
-        public virtual void Dispose()
-        {
-            DependencyResolver.SetResolver(this._originalResolver);
-        }
+    public virtual void Dispose()
+    {
+        DependencyResolver.SetResolver(this._originalResolver);
     }
 }
