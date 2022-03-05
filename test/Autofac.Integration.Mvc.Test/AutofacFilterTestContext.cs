@@ -1,8 +1,9 @@
-﻿using System.Reflection;
-using System.Web.Mvc;
-using System.Web.Mvc.Async;
-using Moq;
+﻿// Copyright (c) Autofac Project. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System.Reflection;
+using System.Web.Mvc.Async;
+using Autofac.Integration.Mvc.Test.Stubs;
 
 namespace Autofac.Integration.Mvc.Test
 {

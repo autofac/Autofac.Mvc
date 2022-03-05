@@ -1,90 +1,91 @@
-# EXIT CODES
+﻿# EXIT CODES
 # 1: dotnet packaging failure
 # 2: dotnet publishing failure
 # 3: Unit test failure
 # 4: dotnet / NuGet package restore failure
 
 <#
- .SYNOPSIS
-  Writes a build progress message to the host.
+.SYNOPSIS
+    Gets the set of directories in which projects are available for compile/processing.
 
- .PARAMETER Message
-  The message to write.
+.PARAMETER RootPath
+    Path where searching for project directories should begin.
 #>
-function Write-Message
-{
-  [CmdletBinding()]
-  Param(
-    [Parameter(Mandatory=$True, ValueFromPipeline=$False, ValueFromPipelineByPropertyName=$False)]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $Message
-  )
+function Get-DotNetProjectDirectory {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $True, ValueFromPipeline = $False, ValueFromPipelineByPropertyName = $False)]
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $RootPath
+    )
 
-  Write-Host "[BUILD] $Message" -ForegroundColor Cyan
+    Get-ChildItem -Path $RootPath -Recurse -Include "*.csproj" | Select-Object @{ Name = "ParentFolder"; Expression = { $_.Directory.FullName.TrimEnd("\") } } | Select-Object -ExpandProperty ParentFolder
 }
 
 <#
- .SYNOPSIS
-  Gets the set of directories in which projects are available for compile/processing.
-
- .PARAMETER RootPath
-  Path where searching for project directories should begin.
+.SYNOPSIS
+    Runs the dotnet CLI install script from GitHub to install a project-local
+    copy of the CLI.
 #>
-function Get-DotNetProjectDirectory
-{
-  [CmdletBinding()]
-  Param(
-    [Parameter(Mandatory=$True, ValueFromPipeline=$False, ValueFromPipelineByPropertyName=$False)]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $RootPath
-  )
+function Install-DotNetCli {
+    [CmdletBinding()]
+    Param(
+        [string]
+        $Version = "Latest"
+    )
+    Write-Message "Installing .NET SDK version $Version"
 
-  Get-ChildItem -Path $RootPath -Recurse -Include "*.csproj" | Select-Object @{ Name="ParentFolder"; Expression={ $_.Directory.FullName.TrimEnd("\") } } | Select-Object -ExpandProperty ParentFolder
+    $callerPath = Split-Path $MyInvocation.PSCommandPath
+    $installDir = Join-Path -Path $callerPath -ChildPath ".dotnet/cli"
+    if (!(Test-Path $installDir)) {
+        New-Item -ItemType Directory -Path "$installDir" | Out-Null
+    }
+
+    # Download the dotnet CLI install script
+    if ($IsWindows) {
+        if (!(Test-Path ./.dotnet/dotnet-install.ps1)) {
+            Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./.dotnet/dotnet-install.ps1"
+        }
+
+        & ./.dotnet/dotnet-install.ps1 -InstallDir "$installDir" -Version $Version
+    } else {
+        if (!(Test-Path ./.dotnet/dotnet-install.sh)) {
+            Invoke-WebRequest "https://dot.net/v1/dotnet-install.sh" -OutFile "./.dotnet/dotnet-install.sh"
+        }
+
+        & bash ./.dotnet/dotnet-install.sh --install-dir "$installDir" --version $Version
+    }
+
+    Add-Path "$installDir"
 }
 
 <#
- .SYNOPSIS
-  Runs the dotnet CLI install script from GitHub to install a project-local
-  copy of the CLI.
+.SYNOPSIS
+    Appends a given value to the path but only if the value does not yet exist within the path.
+.PARAMETER Path
+    The path to append.
 #>
-function Install-DotNetCli
-{
-  [CmdletBinding()]
-  Param(
-    [string]
-    $Version = "Latest"
-  )
+function Add-Path {
+    [CmdletBinding()]
+    Param(
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $Path
+    )
 
-  if ($null -ne (Get-Command "dotnet" -ErrorAction SilentlyContinue))
-  {
-    $installedVersion = dotnet --version
-    if ($installedVersion -eq $Version)
-    {
-      Write-Message ".NET Core SDK version $Version is already installed"
+    $pathSeparator = ":";
+
+    if ($IsWindows) {
+        $pathSeparator = ";";
+    }
+
+    $pathValues = $env:PATH.Split($pathSeparator);
+    if ($pathValues -Contains $Path) {
       return;
     }
-  }
 
-  $callerPath = Split-Path $MyInvocation.PSCommandPath
-  $installDir = Join-Path -Path $callerPath -ChildPath ".dotnet\cli"
-  if (!(Test-Path $installDir))
-  {
-    New-Item -ItemType Directory -Path "$installDir" | Out-Null
-  }
-
-  # Download the dotnet CLI install script
-  if (!(Test-Path .\dotnet\install.ps1))
-  {
-    Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile ".\.dotnet\dotnet-install.ps1"
-  }
-
-  # Run the dotnet CLI install
-  & .\.dotnet\dotnet-install.ps1 -InstallDir "$installDir" -Version $Version
-
-  # Add the dotnet folder path to the process.
-  $env:PATH = "$installDir;$env:PATH"
+    $env:PATH = "${Path}${pathSeparator}$env:PATH"
 }
 
 <#
@@ -95,156 +96,165 @@ function Install-DotNetCli
 .PARAMETER DirectoryName
     The path to the directory containing the project to build.
 #>
-function Invoke-DotNetBuild
-{
-  [CmdletBinding()]
-  Param(
-    [Parameter(Mandatory=$True, ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
-    [ValidateNotNull()]
-    [System.IO.DirectoryInfo[]]
-    $ProjectDirectory
-  )
-  Process
-  {
-    foreach($Project in $ProjectDirectory)
-    {
-      & dotnet build ("""" + $Project.FullName + """") --configuration Release
-      if ($LASTEXITCODE -ne 0)
-      {
-        exit 1
-      }
+function Invoke-DotNetBuild {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $True, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
+        [ValidateNotNull()]
+        [System.IO.DirectoryInfo[]]
+        $ProjectDirectory
+    )
+    Process {
+        foreach ($Project in $ProjectDirectory) {
+            & dotnet build ("""" + $Project.FullName + """") --configuration Release
+            if ($LASTEXITCODE -ne 0) {
+                exit 1
+            }
+        }
     }
-  }
 }
 
 <#
- .SYNOPSIS
-  Invokes the dotnet utility to package a project.
+.SYNOPSIS
+    Invokes the dotnet utility to package a project.
 
- .PARAMETER ProjectDirectory
-  Path to the directory containing the project to package.
+.PARAMETER ProjectDirectory
+    Path to the directory containing the project to package.
 
- .PARAMETER PackagesPath
-  Path to the "artifacts\packages" folder where packages should go.
+.PARAMETER PackagesPath
+    Path to the "artifacts/packages" folder where packages should go.
 
- .PARAMETER VersionSuffix
-  The version suffix to use for the NuGet package version.
+.PARAMETER VersionSuffix
+    The version suffix to use for the NuGet package version.
 #>
-function Invoke-DotNetPack
-{
-  [CmdletBinding()]
-  Param(
-    [Parameter(Mandatory=$True, ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
-    [ValidateNotNull()]
-    [System.IO.DirectoryInfo[]]
-    $ProjectDirectory,
+function Invoke-DotNetPack {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $True, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
+        [ValidateNotNull()]
+        [System.IO.DirectoryInfo[]]
+        $ProjectDirectory,
 
-    [Parameter(Mandatory=$True, ValueFromPipeline=$False)]
-    [ValidateNotNull()]
-    [System.IO.DirectoryInfo]
-    $PackagesPath,
+        [Parameter(Mandatory = $True, ValueFromPipeline = $False)]
+        [ValidateNotNull()]
+        [System.IO.DirectoryInfo]
+        $PackagesPath,
 
-    [Parameter(Mandatory=$True, ValueFromPipeline=$False)]
-    [AllowEmptyString()]
-    [string]
-    $VersionSuffix
-  )
-  Begin
-  {
-    New-Item -Path $PackagesPath -ItemType Directory -Force | Out-Null
-  }
-  Process
-  {
-    foreach($Project in $ProjectDirectory)
-    {
-      if ($VersionSuffix -eq "")
-      {
-        & dotnet build ("""" + $Project.FullName + """") --configuration Release
-      }
-      else
-      {
-        & dotnet build ("""" + $Project.FullName + """") --configuration Release --version-suffix $VersionSuffix
-      }
-      if ($LASTEXITCODE -ne 0)
-      {
-        exit 1
-      }
-
-      if ($VersionSuffix -eq "")
-      {
-        & dotnet pack ("""" + $Project.FullName + """") --configuration Release --output $PackagesPath
-      }
-      else
-      {
-        & dotnet pack ("""" + $Project.FullName + """") --configuration Release --version-suffix $VersionSuffix --output $PackagesPath
-      }
-      if ($LASTEXITCODE -ne 0)
-      {
-        exit 1
-      }
+        [Parameter(Mandatory = $True, ValueFromPipeline = $False)]
+        [AllowEmptyString()]
+        [string]
+        $VersionSuffix
+    )
+    Begin {
+        New-Item -Path $PackagesPath -ItemType Directory -Force | Out-Null
     }
-  }
+    Process {
+        foreach ($Project in $ProjectDirectory) {
+            if ($VersionSuffix -eq "") {
+                & dotnet build ("""" + $Project.FullName + """") --configuration Release
+            }
+            else {
+                & dotnet build ("""" + $Project.FullName + """") --configuration Release --version-suffix $VersionSuffix
+            }
+            if ($LASTEXITCODE -ne 0) {
+                exit 1
+            }
+
+            if ($VersionSuffix -eq "") {
+                & dotnet pack ("""" + $Project.FullName + """") --configuration Release --output $PackagesPath
+            }
+            else {
+                & dotnet pack ("""" + $Project.FullName + """") --configuration Release --version-suffix $VersionSuffix --output $PackagesPath
+            }
+            if ($LASTEXITCODE -ne 0) {
+                exit 1
+            }
+        }
+    }
 }
 
 <#
- .Synopsis
-  Invokes dotnet test command.
+.SYNOPSIS
+    Invokes dotnet test command.
 
- .Parameter ProjectDirectory
-  Path to the directory containing the project to package.
+.PARAMETER ProjectDirectory
+    Path to the directory containing the project to package.
 #>
-function Invoke-Test
-{
-  [CmdletBinding()]
-  Param(
-    [Parameter(Mandatory=$True, ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
-    [ValidateNotNull()]
-    [System.IO.DirectoryInfo[]]
-    $ProjectDirectory
-  )
-  Process
-  {
-    foreach($Project in $ProjectDirectory)
-    {
-      Push-Location $Project
+function Invoke-Test {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $True, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
+        [ValidateNotNull()]
+        [System.IO.DirectoryInfo[]]
+        $ProjectDirectory
+    )
+    Process {
+        foreach ($Project in $ProjectDirectory) {
+            Push-Location $Project
 
-      & dotnet test --configuration Release --logger:trx
-      if ($LASTEXITCODE -ne 0)
-      {
-        Pop-Location
-        exit 3
-      }
+            # Xunit AppDomain handling causes problems with net72 and strong-named test assemblies.
+            # https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/KnownIssues.md#tests-fail-if-assembly-is-strong-named
+            & dotnet test `
+                --configuration Release `
+                --logger:trx `
+                /p:CollectCoverage=true `
+                /p:CoverletOutput="../../artifacts/coverage/$($Project.Name)/" `
+                /p:CoverletOutputFormat="json%2clcov" `
+                /p:ExcludeByAttribute=CompilerGeneratedAttribute `
+                /p:ExcludeByAttribute=GeneratedCodeAttribute `
+                /p:Exclude="[Microsoft.*]*" `
+                -- RunConfiguration.DisableAppDomain=true
 
-      Pop-Location
+            if ($LASTEXITCODE -ne 0) {
+                Pop-Location
+                exit 3
+            }
+
+            Pop-Location
+        }
     }
-  }
 }
 
 <#
- .SYNOPSIS
-  Restores dependencies using the dotnet utility.
+.SYNOPSIS
+    Restores dependencies using the dotnet utility.
 
- .PARAMETER ProjectDirectory
-  Path to the directory containing the project with dependencies to restore.
+.PARAMETER ProjectDirectory
+    Path to the directory containing the project with dependencies to restore.
 #>
-function Restore-DependencyPackages
-{
-  [CmdletBinding()]
-  Param(
-    [Parameter(Mandatory=$True, ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
-    [ValidateNotNull()]
-    [System.IO.DirectoryInfo[]]
-    $ProjectDirectory
-  )
-  Process
-  {
-    foreach($Project in $ProjectDirectory)
-    {
-      & dotnet restore ("""" + $Project.FullName + """") --no-cache
-      if($LASTEXITCODE -ne 0)
-      {
-        exit 4
-      }
+function Restore-DependencyPackages {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $True, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
+        [ValidateNotNull()]
+        [System.IO.DirectoryInfo[]]
+        $ProjectDirectory
+    )
+    Process {
+        foreach ($Project in $ProjectDirectory) {
+            & dotnet restore ("""" + $Project.FullName + """") --no-cache
+            if ($LASTEXITCODE -ne 0) {
+                exit 4
+            }
+        }
     }
-  }
+}
+
+<#
+.SYNOPSIS
+    Writes a build progress message to the host.
+
+.PARAMETER Message
+    The message to write.
+#>
+function Write-Message {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $True, ValueFromPipeline = $False, ValueFromPipelineByPropertyName = $False)]
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $Message
+    )
+
+    Write-Host "[BUILD] $Message" -ForegroundColor Cyan
 }
