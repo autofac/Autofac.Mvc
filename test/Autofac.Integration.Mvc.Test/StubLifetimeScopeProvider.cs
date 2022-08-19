@@ -21,12 +21,9 @@ public class StubLifetimeScopeProvider : ILifetimeScopeProvider
         get { return this._container; }
     }
 
-    public void EndLifetimeScope()
+    public ValueTask EndLifetimeScope()
     {
-        if (this._lifetimeScope != null)
-        {
-            this._lifetimeScope.Dispose();
-        }
+        return this._lifetimeScope != null ? this._lifetimeScope.DisposeAsync() : default;
     }
 
     public ILifetimeScope GetLifetimeScope(Action<ContainerBuilder> configurationAction)

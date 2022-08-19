@@ -31,7 +31,9 @@ internal class RequestLifetimeHttpModule : IHttpModule
             throw new ArgumentNullException(nameof(context));
         }
 
-        context.EndRequest += OnEndRequest;
+        var wrapper = new EventHandlerTaskAsyncHelper(OnEndRequest);
+
+        context.AddOnEndRequestAsync(wrapper.BeginEventHandler, wrapper.EndEventHandler);
     }
 
     /// <summary>
@@ -52,11 +54,28 @@ internal class RequestLifetimeHttpModule : IHttpModule
         LifetimeScopeProvider = lifetimeScopeProvider ?? throw new ArgumentNullException(nameof(lifetimeScopeProvider));
     }
 
-    private static void OnEndRequest(object sender, EventArgs e)
+    [SuppressMessage("CA1849", "CA1849", Justification = "If the value task is already completed, getting the result synchronously isn't a problem.")]
+    private static Task OnEndRequest(object sender, EventArgs e)
     {
-        if (LifetimeScopeProvider != null)
+        if (LifetimeScopeProvider == null)
         {
-            LifetimeScopeProvider.EndLifetimeScope();
+            return Task.CompletedTask;
+        }
+
+        var valueTask = LifetimeScopeProvider.EndLifetimeScope();
+
+        // https://github.com/dotnet/aspnetcore/blob/main/src/Shared/ValueTaskExtensions/ValueTaskExtensions.cs#L13
+
+        // Try to avoid the allocation from AsTask
+        if (valueTask.IsCompletedSuccessfully)
+        {
+            // Signal consumption to the IValueTaskSource
+            valueTask.GetAwaiter().GetResult();
+            return Task.CompletedTask;
+        }
+        else
+        {
+            return valueTask.AsTask();
         }
     }
 }

@@ -70,18 +70,16 @@ public class RequestLifetimeScopeProvider : ILifetimeScopeProvider
     /// <summary>
     /// Ends the current HTTP request lifetime scope.
     /// </summary>
-    public void EndLifetimeScope()
+    public ValueTask EndLifetimeScope()
     {
         if (HttpContext.Current == null)
         {
-            return;
+            return default;
         }
 
         var lifetimeScope = LifetimeScope;
-        if (lifetimeScope != null)
-        {
-            lifetimeScope.Dispose();
-        }
+
+        return lifetimeScope != null ? lifetimeScope.DisposeAsync() : default;
     }
 
     /// <summary>
