@@ -21,7 +21,7 @@ public interface ILifetimeScopeProvider
     /// <summary>
     /// Ends the current lifetime scope.
     /// </summary>
-    void EndLifetimeScope();
+    ValueTask EndLifetimeScope();
 
     /// <summary>
     /// Gets the global, application-wide container.
