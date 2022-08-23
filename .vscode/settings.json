@@ -8,6 +8,7 @@
     "inheritdoc",
     "langword",
     "listheader",
+    "owin",
     "paramref",
     "typeparam",
     "xunit"

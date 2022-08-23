@@ -5,7 +5,8 @@
     <VersionPrefix>0.0.1</VersionPrefix>
     <!-- Assembly metadata -->
     <AssemblyName>Autofac.Integration.Mvc</AssemblyName>
-    <Description>Autofac MVC Integration</Description>
+    <AssemblyTitle>Autofac.Integration.Mvc</AssemblyTitle>
+    <Description>ASP.NET MVC 5 integration for Autofac.</Description>
     <Copyright>Copyright © 2015 Autofac Contributors</Copyright>
     <Authors>Autofac Contributors</Authors>
     <Company>Autofac</Company>
@@ -28,6 +29,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://autofac.org</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/autofac/Autofac.Mvc</RepositoryUrl>
     <ContinuousIntegrationBuild Condition="'$(CI)' != '' ">true</ContinuousIntegrationBuild>
@@ -45,6 +47,7 @@
 
   <ItemGroup>
     <None Include="..\..\build\icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
