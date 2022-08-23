@@ -32,7 +32,7 @@ public class AutofacDependencyResolver : IDependencyResolver
     /// </summary>
     /// <param name="container">The container that nested lifetime scopes will be create from.</param>
     /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/>
-    /// that adds component registations visible only in nested lifetime scopes.</param>
+    /// that adds component registrations visible only in nested lifetime scopes.</param>
     public AutofacDependencyResolver(ILifetimeScope container, Action<ContainerBuilder> configurationAction)
         : this(container)
     {
@@ -58,7 +58,7 @@ public class AutofacDependencyResolver : IDependencyResolver
     /// <param name="lifetimeScopeProvider">A <see cref="ILifetimeScopeProvider"/> implementation for
     /// creating new lifetime scopes.</param>
     /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/>
-    /// that adds component registations visible only in nested lifetime scopes.</param>
+    /// that adds component registrations visible only in nested lifetime scopes.</param>
     public AutofacDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider, Action<ContainerBuilder> configurationAction)
         : this(container, lifetimeScopeProvider)
     {

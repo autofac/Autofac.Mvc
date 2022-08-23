@@ -1,8 +1,15 @@
 {
   "cSpell.words": [
     "autofac",
+    "autowired",
+    "browsable",
     "cref",
     "diagnoser",
+    "inheritdoc",
+    "langword",
+    "listheader",
+    "paramref",
+    "typeparam",
     "xunit"
   ],
   "dotnet-test-explorer.testProjectPath": "test/**/*Test.csproj",
