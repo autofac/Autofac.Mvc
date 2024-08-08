@@ -21,7 +21,7 @@ public class AutofacDependencyResolver : IDependencyResolver
     /// <summary>
     /// Initializes a new instance of the <see cref="AutofacDependencyResolver"/> class.
     /// </summary>
-    /// <param name="container">The container from which nested lifetime scopes will be created.</param>
+    /// <param name="container">The container that nested lifetime scopes will be create from.</param>
     public AutofacDependencyResolver(ILifetimeScope container)
     {
         _container = container ?? throw new ArgumentNullException(nameof(container));
@@ -30,7 +30,7 @@ public class AutofacDependencyResolver : IDependencyResolver
     /// <summary>
     /// Initializes a new instance of the <see cref="AutofacDependencyResolver"/> class.
     /// </summary>
-    /// <param name="container">The container from which nested lifetime scopes will be created.</param>
+    /// <param name="container">The container that nested lifetime scopes will be create from.</param>
     /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/>
     /// that adds component registrations visible only in nested lifetime scopes.</param>
     public AutofacDependencyResolver(ILifetimeScope container, Action<ContainerBuilder> configurationAction)
@@ -42,7 +42,7 @@ public class AutofacDependencyResolver : IDependencyResolver
     /// <summary>
     /// Initializes a new instance of the <see cref="AutofacDependencyResolver"/> class.
     /// </summary>
-    /// <param name="container">The container from which nested lifetime scopes will be created.</param>
+    /// <param name="container">The container that nested lifetime scopes will be create from.</param>
     /// <param name="lifetimeScopeProvider">A <see cref="ILifetimeScopeProvider"/> implementation for
     /// creating new lifetime scopes.</param>
     public AutofacDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider)
@@ -54,7 +54,7 @@ public class AutofacDependencyResolver : IDependencyResolver
     /// <summary>
     /// Initializes a new instance of the <see cref="AutofacDependencyResolver"/> class.
     /// </summary>
-    /// <param name="container">The container from which nested lifetime scopes will be created.</param>
+    /// <param name="container">The container that nested lifetime scopes will be create from.</param>
     /// <param name="lifetimeScopeProvider">A <see cref="ILifetimeScopeProvider"/> implementation for
     /// creating new lifetime scopes.</param>
     /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/>
