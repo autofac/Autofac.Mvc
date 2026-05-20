@@ -2,7 +2,7 @@
 
 ASP.NET MVC integration for [Autofac](https://autofac.org).
 
-[![Build status](https://ci.appveyor.com/api/projects/status/bw1p26wbae0jeye5?svg=true)](https://ci.appveyor.com/project/Autofac/autofac-mvc)
+[![Build status](https://github.com/autofac/Autofac.Mvc/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/autofac/Autofac.Mvc/actions/workflows/ci.yml)
 
 Please file issues and pull requests for this package [in this repository](https://github.com/autofac/Autofac.Mvc/issues) rather than in the Autofac core repo.
 
