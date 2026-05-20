@@ -10,8 +10,8 @@
 
 namespace Autofac.Integration.Mvc {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace Autofac.Integration.Mvc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class RegistrationExtensionsResources {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal RegistrationExtensionsResources() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Autofac.Integration.Mvc {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,7 +59,7 @@ namespace Autofac.Integration.Mvc {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The action method Expression is invalid. It should consist only of a Method call to a controller action method..
         /// </summary>
@@ -68,7 +68,7 @@ namespace Autofac.Integration.Mvc {
                 return ResourceManager.GetString("InvalidActionExpress", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Type list may not be empty or contain all null values..
         /// </summary>
@@ -77,7 +77,7 @@ namespace Autofac.Integration.Mvc {
                 return ResourceManager.GetString("InvalidModelBinderType", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The type &apos;{0}&apos; must be assignable to the filter type &apos;{1}&apos;..
         /// </summary>
