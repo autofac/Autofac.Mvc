@@ -16,10 +16,11 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <!-- Frameworks and language features -->
     <TargetFramework>net472</TargetFramework>
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
     <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <CodeAnalysisRuleSet>../../build/Analyzers.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>../../build/Source.ruleset</CodeAnalysisRuleSet>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <ImplicitUsings>enable</ImplicitUsings>
     <!-- Packaging -->

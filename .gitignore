@@ -85,6 +85,7 @@ _TeamCity*
 
 # Coverage
 coverage.*
+!build/Coverage.runsettings
 codecov.sh
 coverage/
 
