@@ -24,7 +24,7 @@ public class AutofacFilterProviderFixture : IClassFixture<DependencyResolverRepl
         this._baseControllerContext = new ControllerContext { Controller = new TestController() };
         this._baseMethodInfo = TestController.GetAction1MethodInfo<TestController>();
         this._actionName = this._baseMethodInfo.Name;
-        this._controllerDescriptor = new Mock<ControllerDescriptor>().Object;
+        this._controllerDescriptor = Substitute.For<ControllerDescriptor>();
         this._reflectedActionDescriptor = new ReflectedActionDescriptor(this._baseMethodInfo, this._actionName, this._controllerDescriptor);
     }
 

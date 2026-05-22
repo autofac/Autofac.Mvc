@@ -18,11 +18,11 @@ public class ExtensibleActionInvokerTestContext : DependencyResolverReplacementC
 
         DependencyResolver.SetResolver(new AutofacDependencyResolver(this.Container, new StubLifetimeScopeProvider(this.Container)));
 
-        var request = new Mock<HttpRequestBase>();
-        var httpContext = new Mock<HttpContextBase>();
-        httpContext.Setup(mock => mock.Request).Returns(request.Object);
+        var request = Substitute.For<HttpRequestBase>();
+        var httpContext = Substitute.For<HttpContextBase>();
+        httpContext.Request.Returns(request);
         this.Controller = new TestController { ValidateRequest = false };
-        this.ControllerContext = new ControllerContext { Controller = this.Controller, HttpContext = httpContext.Object };
+        this.ControllerContext = new ControllerContext { Controller = this.Controller, HttpContext = httpContext };
         this.Controller.ControllerContext = this.ControllerContext;
         this.Controller.ValueProvider = new NameValueCollectionValueProvider(new NameValueCollection(), CultureInfo.InvariantCulture);
     }
