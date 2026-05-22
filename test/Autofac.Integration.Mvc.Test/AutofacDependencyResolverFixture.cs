@@ -124,7 +124,7 @@ public class AutofacDependencyResolverFixture : IClassFixture<DependencyResolver
         Assert.Equal("configurationAction", exception.ParamName);
 
         exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(container, new Mock<ILifetimeScopeProvider>().Object, null));
+            () => new AutofacDependencyResolver(container, Substitute.For<ILifetimeScopeProvider>(), null));
         Assert.Equal("configurationAction", exception.ParamName);
     }
 
@@ -140,11 +140,11 @@ public class AutofacDependencyResolverFixture : IClassFixture<DependencyResolver
         Assert.Equal("container", exception.ParamName);
 
         exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(null, new Mock<ILifetimeScopeProvider>().Object));
+            () => new AutofacDependencyResolver(null, Substitute.For<ILifetimeScopeProvider>()));
         Assert.Equal("container", exception.ParamName);
 
         exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(null, new Mock<ILifetimeScopeProvider>().Object, cb => { }));
+            () => new AutofacDependencyResolver(null, Substitute.For<ILifetimeScopeProvider>(), cb => { }));
         Assert.Equal("container", exception.ParamName);
     }
 

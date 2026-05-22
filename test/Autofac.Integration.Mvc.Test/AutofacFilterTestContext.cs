@@ -18,7 +18,7 @@ namespace Autofac.Integration.Mvc.Test
             this.DerivedMethodInfo = TestController.GetAction1MethodInfo<TestControllerA>();
             this.MostDerivedMethodInfo = TestController.GetAction1MethodInfo<TestControllerB>();
             this.ActionName = this.BaseMethodInfo.Name;
-            this.ControllerDescriptor = new Mock<ControllerDescriptor>().Object;
+            this.ControllerDescriptor = Substitute.For<ControllerDescriptor>();
             this.ReflectedActionDescriptor = new ReflectedActionDescriptor(this.BaseMethodInfo, this.ActionName, this.ControllerDescriptor);
             this.ReflectedAsyncActionDescriptor = new ReflectedAsyncActionDescriptor(this.BaseMethodInfo, this.BaseMethodInfo, this.ActionName, this.ControllerDescriptor);
             this.TaskAsyncActionDescriptor = new TaskAsyncActionDescriptor(this.BaseMethodInfo, this.ActionName, this.ControllerDescriptor);

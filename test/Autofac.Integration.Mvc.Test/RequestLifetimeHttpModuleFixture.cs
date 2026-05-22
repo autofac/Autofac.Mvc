@@ -15,8 +15,8 @@ public class RequestLifetimeHttpModuleFixture
     [Fact]
     public void CanSetNonNullLifetimeScopeProvider()
     {
-        var provider = new Mock<ILifetimeScopeProvider>();
-        RequestLifetimeHttpModule.SetLifetimeScopeProvider(provider.Object);
-        Assert.Equal(provider.Object, RequestLifetimeHttpModule.LifetimeScopeProvider);
+        var provider = Substitute.For<ILifetimeScopeProvider>();
+        RequestLifetimeHttpModule.SetLifetimeScopeProvider(provider);
+        Assert.Equal(provider, RequestLifetimeHttpModule.LifetimeScopeProvider);
     }
 }
