@@ -536,6 +536,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     public static void OverrideActionFilterFor<TController>(this ContainerBuilder builder)
             where TController : IController
@@ -546,6 +547,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller action.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     /// <param name="actionSelector">The action selector.</param>
     public static void OverrideActionFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
@@ -557,6 +559,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     public static void OverrideAuthenticationFilterFor<TController>(this ContainerBuilder builder)
             where TController : IController
@@ -567,6 +570,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller action.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     /// <param name="actionSelector">The action selector.</param>
     public static void OverrideAuthenticationFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
@@ -578,6 +582,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     public static void OverrideAuthorizationFilterFor<TController>(this ContainerBuilder builder)
             where TController : IController
@@ -588,6 +593,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller action.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     /// <param name="actionSelector">The action selector.</param>
     public static void OverrideAuthorizationFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
@@ -599,6 +605,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     public static void OverrideExceptionFilterFor<TController>(this ContainerBuilder builder)
             where TController : IController
@@ -609,6 +616,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller action.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     /// <param name="actionSelector">The action selector.</param>
     public static void OverrideExceptionFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
@@ -620,6 +628,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     public static void OverrideResultFilterFor<TController>(this ContainerBuilder builder)
             where TController : IController
@@ -630,6 +639,7 @@ public static class RegistrationExtensions
     /// <summary>
     /// Sets the provided registration to act as an <see cref="IOverrideFilter"/> for the specified controller action.
     /// </summary>
+    /// <typeparam name="TController">The type of the controller.</typeparam>
     /// <param name="builder">The container builder.</param>
     /// <param name="actionSelector">The action selector.</param>
     public static void OverrideResultFilterFor<TController>(this ContainerBuilder builder, Expression<Action<TController>> actionSelector)
@@ -767,7 +777,7 @@ public static class RegistrationExtensions
 
         if (!limitType.IsAssignableTo<TFilter>())
         {
-            string message = string.Format(
+            var message = string.Format(
                                 CultureInfo.CurrentCulture,
                                 RegistrationExtensionsResources.MustBeAssignableToFilterType,
                                 limitType.FullName,
@@ -804,7 +814,7 @@ public static class RegistrationExtensions
 
         if (!limitType.IsAssignableTo<TFilter>())
         {
-            string message = string.Format(
+            var message = string.Format(
                                 CultureInfo.CurrentCulture,
                                 RegistrationExtensionsResources.MustBeAssignableToFilterType,
                                 limitType.FullName,

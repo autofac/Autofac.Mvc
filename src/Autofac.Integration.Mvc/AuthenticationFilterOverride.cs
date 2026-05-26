@@ -24,7 +24,10 @@ internal class AuthenticationFilterOverride : IAuthenticationFilter, IOverrideFi
     /// <inheritdoc/>
     public Type FiltersToOverride
     {
-        get { return typeof(IAuthenticationFilter); }
+        get
+        {
+            return typeof(IAuthenticationFilter);
+        }
     }
 
     /// <inheritdoc/>

@@ -5,5 +5,8 @@ namespace Autofac.Integration.Mvc.Test.Stubs;
 
 public abstract class AbstractWebViewPageWithModel<T> : WebViewPage<T>
 {
-    public Dependency Dependency { get; set; }
+    public Dependency Dependency
+    {
+        get; set;
+    }
 }

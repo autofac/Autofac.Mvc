@@ -7,7 +7,10 @@ namespace Autofac.Integration.Mvc.Test.Stubs;
 
 public class TestController : Controller
 {
-    public object Dependency { get; set; }
+    public object Dependency
+    {
+        get; set;
+    }
 
     public static MethodInfo GetAction1MethodInfo<T>()
         where T : TestController

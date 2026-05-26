@@ -14,7 +14,10 @@ public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> 
         this.TestContext = testContext;
     }
 
-    public AutofacFilterTestContext TestContext { get; private set; }
+    public AutofacFilterTestContext TestContext
+    {
+        get; private set;
+    }
 
     [Fact]
     public void ResolvesActionScopedFilterForImmediateBaseContoller()

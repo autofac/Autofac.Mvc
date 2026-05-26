@@ -24,7 +24,10 @@ internal class AuthorizationFilterOverride : IAuthorizationFilter, IOverrideFilt
     /// <inheritdoc/>
     public Type FiltersToOverride
     {
-        get { return typeof(IAuthorizationFilter); }
+        get
+        {
+            return typeof(IAuthorizationFilter);
+        }
     }
 
     /// <inheritdoc/>

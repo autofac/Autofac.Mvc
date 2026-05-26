@@ -29,18 +29,33 @@ public class ExtensibleActionInvokerTestContext : DependencyResolverReplacementC
 
     public interface IActionDependency
     {
-        ActionDependencyProperty Property { get; }
+        ActionDependencyProperty Property
+        {
+            get;
+        }
     }
 
-    public IContainer Container { get; private set; }
+    public IContainer Container
+    {
+        get; private set;
+    }
 
-    public TestController Controller { get; private set; }
+    public TestController Controller
+    {
+        get; private set;
+    }
 
-    public ControllerContext ControllerContext { get; private set; }
+    public ControllerContext ControllerContext
+    {
+        get; private set;
+    }
 
     public class ActionDependency : IActionDependency
     {
-        public ActionDependencyProperty Property { get; set; }
+        public ActionDependencyProperty Property
+        {
+            get; set;
+        }
     }
 
     public class ActionDependencyProperty
@@ -49,7 +64,10 @@ public class ExtensibleActionInvokerTestContext : DependencyResolverReplacementC
 
     public class TestController : Controller
     {
-        public IActionDependency Dependency { get; private set; }
+        public IActionDependency Dependency
+        {
+            get; private set;
+        }
 
         public ActionResult Index(IActionDependency dependency)
         {

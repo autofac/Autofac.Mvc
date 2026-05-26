@@ -15,23 +15,35 @@ internal class FilterMetadata
     /// Gets or sets the type of the controller.
     /// </summary>
     [DefaultValue(null)]
-    public Type ControllerType { get; set; }
+    public Type ControllerType
+    {
+        get; set;
+    }
 
     /// <summary>
     /// Gets or sets the filter scope.
     /// </summary>
     [DefaultValue(FilterScope.First)]
-    public FilterScope FilterScope { get; set; }
+    public FilterScope FilterScope
+    {
+        get; set;
+    }
 
     /// <summary>
     /// Gets or sets the method info.
     /// </summary>
     [DefaultValue(null)]
-    public MethodInfo MethodInfo { get; set; }
+    public MethodInfo MethodInfo
+    {
+        get; set;
+    }
 
     /// <summary>
     /// Gets or sets the order in which the filter is applied.
     /// </summary>
     [DefaultValue(-1)]
-    public int Order { get; set; }
+    public int Order
+    {
+        get; set;
+    }
 }

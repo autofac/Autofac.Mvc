@@ -10,7 +10,10 @@ public class ExtensibleActionInvokerFixture : IClassFixture<ExtensibleActionInvo
         this.TestContext = testContext;
     }
 
-    public ExtensibleActionInvokerTestContext TestContext { get; private set; }
+    public ExtensibleActionInvokerTestContext TestContext
+    {
+        get; private set;
+    }
 
     [Fact]
     public void ActionInjection_DependencyRegistered_ServiceResolved()

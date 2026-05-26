@@ -24,7 +24,10 @@ internal class ExceptionFilterOverride : IExceptionFilter, IOverrideFilter
     /// <inheritdoc/>
     public Type FiltersToOverride
     {
-        get { return typeof(IExceptionFilter); }
+        get
+        {
+            return typeof(IExceptionFilter);
+        }
     }
 
     /// <inheritdoc/>

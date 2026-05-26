@@ -313,12 +313,24 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
 
     private class FilterContext
     {
-        public ActionDescriptor ActionDescriptor { get; set; }
+        public ActionDescriptor ActionDescriptor
+        {
+            get; set;
+        }
 
-        public Type ControllerType { get; set; }
+        public Type ControllerType
+        {
+            get; set;
+        }
 
-        public List<Filter> Filters { get; set; }
+        public List<Filter> Filters
+        {
+            get; set;
+        }
 
-        public ILifetimeScope LifetimeScope { get; set; }
+        public ILifetimeScope LifetimeScope
+        {
+            get; set;
+        }
     }
 }

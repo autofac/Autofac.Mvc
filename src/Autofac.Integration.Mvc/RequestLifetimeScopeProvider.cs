@@ -32,13 +32,23 @@ public class RequestLifetimeScopeProvider : ILifetimeScopeProvider
     /// </summary>
     public ILifetimeScope ApplicationContainer
     {
-        get { return _container; }
+        get
+        {
+            return _container;
+        }
     }
 
     private static ILifetimeScope LifetimeScope
     {
-        get { return (ILifetimeScope)HttpContext.Current.Items[typeof(ILifetimeScope)]; }
-        set { HttpContext.Current.Items[typeof(ILifetimeScope)] = value; }
+        get
+        {
+            return (ILifetimeScope)HttpContext.Current.Items[typeof(ILifetimeScope)];
+        }
+
+        set
+        {
+            HttpContext.Current.Items[typeof(ILifetimeScope)] = value;
+        }
     }
 
     /// <summary>
@@ -70,6 +80,7 @@ public class RequestLifetimeScopeProvider : ILifetimeScopeProvider
     /// <summary>
     /// Ends the current HTTP request lifetime scope.
     /// </summary>
+    /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
     public ValueTask EndLifetimeScope()
     {
         if (HttpContext.Current == null)
@@ -90,7 +101,7 @@ public class RequestLifetimeScopeProvider : ILifetimeScopeProvider
     /// A configuration action that will execute during lifetime scope creation.
     /// </param>
     /// <returns>A new lifetime scope for the current HTTP request.</returns>
-    [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+    [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Method accepts a configuration action parameter.")]
     protected virtual ILifetimeScope GetLifetimeScopeCore(Action<ContainerBuilder> configurationAction)
     {
         return (configurationAction == null)

@@ -81,7 +81,10 @@ public class AutofacDependencyResolver : IDependencyResolver
     /// </summary>
     public ILifetimeScope ApplicationContainer
     {
-        get { return _container; }
+        get
+        {
+            return _container;
+        }
     }
 
     /// <summary>
