@@ -14,7 +14,21 @@ internal class RequestLifetimeHttpModule : IHttpModule
     /// <summary>
     /// Gets the lifetime scope provider that should be notified when a HTTP request ends.
     /// </summary>
-    internal static ILifetimeScopeProvider LifetimeScopeProvider { get; private set; }
+    internal static ILifetimeScopeProvider LifetimeScopeProvider
+    {
+        get; private set;
+    }
+
+    /// <summary>
+    /// Sets the global lifetime scope provider.
+    /// </summary>
+    /// <param name="lifetimeScopeProvider">
+    /// The <see cref="ILifetimeScopeProvider"/> that manages the ambient request lifetime scope.
+    /// </param>
+    public static void SetLifetimeScopeProvider(ILifetimeScopeProvider lifetimeScopeProvider)
+    {
+        LifetimeScopeProvider = lifetimeScopeProvider ?? throw new ArgumentNullException(nameof(lifetimeScopeProvider));
+    }
 
     /// <summary>
     /// Initializes a module and prepares it to handle requests.
@@ -41,17 +55,6 @@ internal class RequestLifetimeHttpModule : IHttpModule
     /// </summary>
     public void Dispose()
     {
-    }
-
-    /// <summary>
-    /// Sets the global lifetime scope provider.
-    /// </summary>
-    /// <param name="lifetimeScopeProvider">
-    /// The <see cref="ILifetimeScopeProvider"/> that manages the ambient request lifetime scope.
-    /// </param>
-    public static void SetLifetimeScopeProvider(ILifetimeScopeProvider lifetimeScopeProvider)
-    {
-        LifetimeScopeProvider = lifetimeScopeProvider ?? throw new ArgumentNullException(nameof(lifetimeScopeProvider));
     }
 
     [SuppressMessage("CA1849", "CA1849", Justification = "If the value task is already completed, getting the result synchronously isn't a problem.")]

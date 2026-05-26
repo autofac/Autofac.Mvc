@@ -24,7 +24,10 @@ internal class ResultFilterOverride : IResultFilter, IOverrideFilter
     /// <inheritdoc/>
     public Type FiltersToOverride
     {
-        get { return typeof(IResultFilter); }
+        get
+        {
+            return typeof(IResultFilter);
+        }
     }
 
     /// <inheritdoc/>

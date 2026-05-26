@@ -6,15 +6,10 @@ namespace Autofac.Integration.Mvc;
 /// <summary>
 /// Indicates what types a model binder supports.
 /// </summary>
-[SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
+[SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments", Justification = "Constructor accepts params array but property exposes IEnumerable.")]
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
 public sealed class ModelBinderTypeAttribute : Attribute
 {
-    /// <summary>
-    /// Gets the target types.
-    /// </summary>
-    public IEnumerable<Type> TargetTypes { get; private set; }
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ModelBinderTypeAttribute"/> class.
     /// </summary>
@@ -36,5 +31,13 @@ public sealed class ModelBinderTypeAttribute : Attribute
         }
 
         TargetTypes = new Type[] { targetType };
+    }
+
+    /// <summary>
+    /// Gets the target types.
+    /// </summary>
+    public IEnumerable<Type> TargetTypes
+    {
+        get; private set;
     }
 }

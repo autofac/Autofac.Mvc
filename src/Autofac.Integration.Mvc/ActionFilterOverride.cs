@@ -24,7 +24,10 @@ internal class ActionFilterOverride : IActionFilter, IOverrideFilter
     /// <inheritdoc/>
     public Type FiltersToOverride
     {
-        get { return typeof(IActionFilter); }
+        get
+        {
+            return typeof(IActionFilter);
+        }
     }
 
     /// <inheritdoc/>

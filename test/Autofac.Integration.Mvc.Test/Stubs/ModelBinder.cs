@@ -12,7 +12,10 @@ public class ModelBinder : IModelBinder
         this.Dependency = dependency;
     }
 
-    public Dependency Dependency { get; private set; }
+    public Dependency Dependency
+    {
+        get; private set;
+    }
 
     public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
     {

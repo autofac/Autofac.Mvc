@@ -16,6 +16,18 @@ namespace Autofac.Integration.Mvc;
 public class ViewRegistrationSource : IRegistrationSource
 {
     /// <summary>
+    /// Gets a value indicating whether the registrations provided by this source are 1:1 adapters on top
+    /// of other components (I.e. like Meta, Func or Owned.)
+    /// </summary>
+    public bool IsAdapterForIndividualComponents
+    {
+        get
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Retrieve registrations for an unregistered service, to be used
     /// by the container.
     /// </summary>
@@ -31,15 +43,6 @@ public class ViewRegistrationSource : IRegistrationSource
                 .InstancePerDependency()
                 .CreateRegistration();
         }
-    }
-
-    /// <summary>
-    /// Gets a value indicating whether the registrations provided by this source are 1:1 adapters on top
-    /// of other components (I.e. like Meta, Func or Owned.)
-    /// </summary>
-    public bool IsAdapterForIndividualComponents
-    {
-        get { return false; }
     }
 
     private static bool IsSupportedView(Type serviceType)

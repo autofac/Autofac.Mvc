@@ -18,7 +18,10 @@ public class StubLifetimeScopeProvider : ILifetimeScopeProvider
 
     public ILifetimeScope ApplicationContainer
     {
-        get { return this._container; }
+        get
+        {
+            return this._container;
+        }
     }
 
     public ValueTask EndLifetimeScope()
