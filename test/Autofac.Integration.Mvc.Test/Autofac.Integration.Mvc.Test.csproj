@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net481</TargetFramework>
-    <NoWarn>$(NoWarn);CS1591;NU1900</NoWarn>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyTitle>Autofac.Integration.Mvc.Test</AssemblyTitle>
     <AssemblyOriginatorKeyFile>../../Autofac.snk</AssemblyOriginatorKeyFile>

@@ -14,7 +14,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <!-- Frameworks and language features -->
     <TargetFramework>net481</TargetFramework>
-    <NoWarn>$(NoWarn);NU1900;NU1903</NoWarn>
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
     <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
