@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net481</TargetFramework>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;NU1900</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyTitle>Autofac.Integration.Mvc.Test</AssemblyTitle>
     <AssemblyOriginatorKeyFile>../../Autofac.snk</AssemblyOriginatorKeyFile>
@@ -41,7 +41,7 @@
 
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.3.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
