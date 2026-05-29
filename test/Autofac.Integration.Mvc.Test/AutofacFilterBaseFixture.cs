@@ -9,7 +9,7 @@ public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> 
     where TFilter1 : new()
     where TFilter2 : new()
 {
-    public AutofacFilterBaseFixture(AutofacFilterTestContext testContext)
+    protected AutofacFilterBaseFixture(AutofacFilterTestContext testContext)
     {
         this.TestContext = testContext;
     }
@@ -20,7 +20,7 @@ public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> 
     }
 
     [Fact]
-    public void ResolvesActionScopedFilterForImmediateBaseContoller()
+    public void ResolvesActionScopedFilterForImmediateBaseController()
     {
         AssertSingleFilter(
             FilterScope.Action,
@@ -30,7 +30,7 @@ public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> 
     }
 
     [Fact]
-    public void ResolvesActionScopedFilterForMostBaseContoller()
+    public void ResolvesActionScopedFilterForMostBaseController()
     {
         AssertSingleFilter(
             FilterScope.Action,
@@ -67,7 +67,7 @@ public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> 
     }
 
     [Fact]
-    public void ResolvesActionScopedOverrideFilterForImmediateBaseContoller()
+    public void ResolvesActionScopedOverrideFilterForImmediateBaseController()
     {
         AssertOverrideFilter(
             this.TestContext.ReflectedActionDescriptor,
@@ -76,7 +76,7 @@ public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> 
     }
 
     [Fact]
-    public void ResolvesActionScopedOverrideFilterForMostBaseContoller()
+    public void ResolvesActionScopedOverrideFilterForMostBaseController()
     {
         AssertOverrideFilter(
             this.TestContext.ReflectedActionDescriptor,
@@ -126,7 +126,7 @@ public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> 
     }
 
     [Fact]
-    public void ResolvesControllerScopedOverrideFilterForImmediateBaseContoller()
+    public void ResolvesControllerScopedOverrideFilterForImmediateBaseController()
     {
         AssertOverrideFilter(
             this.TestContext.ReflectedActionDescriptor,
@@ -135,7 +135,7 @@ public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> 
     }
 
     [Fact]
-    public void ResolvesControllerScopedOverrideFilterForMostBaseContoller()
+    public void ResolvesControllerScopedOverrideFilterForMostBaseController()
     {
         AssertOverrideFilter(
             this.TestContext.ReflectedActionDescriptor,
