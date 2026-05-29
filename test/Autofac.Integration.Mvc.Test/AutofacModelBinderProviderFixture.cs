@@ -68,7 +68,7 @@ public class AutofacModelBinderProviderFixture
         using var httpRequestScope = container.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
         var modelBinders = httpRequestScope.Resolve<IEnumerable<IModelBinder>>().ToList();
         Assert.Single(modelBinders);
-        Assert.IsType<ModelBinderWithoutAttribute>(modelBinders.First());
+        Assert.IsType<ModelBinderWithoutAttribute>(modelBinders[0]);
 
         var provider = (AutofacModelBinderProvider)httpRequestScope.Resolve<IModelBinderProvider>();
         Assert.Null(provider.GetBinder(typeof(object)));

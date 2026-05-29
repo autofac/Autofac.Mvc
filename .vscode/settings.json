@@ -13,7 +13,5 @@
     "typeparam",
     "xunit"
   ],
-  "dotnet-test-explorer.testProjectPath": "test/**/*Test.csproj",
-  "omnisharp.enableEditorConfigSupport": true,
-  "omnisharp.enableRoslynAnalyzers": true
+  "omnisharp.enableEditorConfigSupport": true
 }

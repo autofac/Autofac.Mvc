@@ -65,13 +65,10 @@ public class RequestLifetimeScopeProvider : ILifetimeScopeProvider
             throw new InvalidOperationException(RequestLifetimeScopeProviderResources.HttpContextNotAvailable);
         }
 
-        if (LifetimeScope == null)
+        if (LifetimeScope == null && (LifetimeScope = GetLifetimeScopeCore(configurationAction)) == null)
         {
-            if ((LifetimeScope = GetLifetimeScopeCore(configurationAction)) == null)
-            {
-                throw new InvalidOperationException(
-                    string.Format(CultureInfo.CurrentCulture, RequestLifetimeScopeProviderResources.NullLifetimeScopeReturned, GetType().FullName));
-            }
+            throw new InvalidOperationException(
+                string.Format(CultureInfo.CurrentCulture, RequestLifetimeScopeProviderResources.NullLifetimeScopeReturned, GetType().FullName));
         }
 
         return LifetimeScope;

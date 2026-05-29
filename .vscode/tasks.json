@@ -3,6 +3,7 @@
     {
       "args": [
         "build",
+        "Autofac.Mvc.sln",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],

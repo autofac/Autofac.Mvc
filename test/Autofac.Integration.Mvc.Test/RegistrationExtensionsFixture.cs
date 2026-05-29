@@ -475,8 +475,12 @@ public class RegistrationExtensionsFixture
     public void RegisterFilterProviderCanSafelyBeCalledTwice()
     {
         var builder = new ContainerBuilder();
-        builder.RegisterFilterProvider();
-        builder.RegisterFilterProvider();
+        var exception = Record.Exception(() =>
+        {
+            builder.RegisterFilterProvider();
+            builder.RegisterFilterProvider();
+        });
+        Assert.Null(exception);
     }
 
     [Fact]

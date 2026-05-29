@@ -311,7 +311,7 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
         }
     }
 
-    private class FilterContext
+    private sealed class FilterContext
     {
         public ActionDescriptor ActionDescriptor
         {
