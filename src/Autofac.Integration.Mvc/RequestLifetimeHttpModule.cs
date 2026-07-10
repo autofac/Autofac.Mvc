@@ -14,7 +14,7 @@ internal class RequestLifetimeHttpModule : IHttpModule
     /// <summary>
     /// Gets the lifetime scope provider that should be notified when a HTTP request ends.
     /// </summary>
-    internal static ILifetimeScopeProvider LifetimeScopeProvider
+    internal static ILifetimeScopeProvider? LifetimeScopeProvider
     {
         get; private set;
     }

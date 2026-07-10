@@ -58,7 +58,7 @@ public class RequestLifetimeScopeProvider : ILifetimeScopeProvider
     /// A configuration action that will execute during lifetime scope creation.
     /// </param>
     /// <returns>A new or existing nested lifetime scope.</returns>
-    public ILifetimeScope GetLifetimeScope(Action<ContainerBuilder> configurationAction)
+    public ILifetimeScope GetLifetimeScope(Action<ContainerBuilder>? configurationAction)
     {
         if (HttpContext.Current == null)
         {
@@ -99,7 +99,7 @@ public class RequestLifetimeScopeProvider : ILifetimeScopeProvider
     /// </param>
     /// <returns>A new lifetime scope for the current HTTP request.</returns>
     [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Method accepts a configuration action parameter.")]
-    protected virtual ILifetimeScope GetLifetimeScopeCore(Action<ContainerBuilder> configurationAction)
+    protected virtual ILifetimeScope GetLifetimeScopeCore(Action<ContainerBuilder>? configurationAction)
     {
         return (configurationAction == null)
                    ? ApplicationContainer.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag)

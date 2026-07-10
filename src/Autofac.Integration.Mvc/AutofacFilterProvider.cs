@@ -103,13 +103,7 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
 
             var controllerType = controllerContext.Controller.GetType();
 
-            var filterContext = new FilterContext
-            {
-                ActionDescriptor = actionDescriptor,
-                LifetimeScope = lifetimeScope,
-                ControllerType = controllerType,
-                Filters = filters,
-            };
+            var filterContext = new FilterContext(actionDescriptor, controllerType, filters, lifetimeScope);
 
             ResolveControllerScopedFilters(filterContext);
 
@@ -138,7 +132,7 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
         return metadata.ControllerType != null
                && metadata.ControllerType.IsAssignableFrom(filterContext.ControllerType)
                && metadata.FilterScope == FilterScope.Action
-               && metadata.MethodInfo.GetBaseDefinition() == methodInfo.GetBaseDefinition();
+               && metadata.MethodInfo?.GetBaseDefinition() == methodInfo.GetBaseDefinition();
     }
 
     private static bool FilterMatchesController(FilterContext filterContext, FilterMetadata metadata)
@@ -166,14 +160,18 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
         ResolveActionScopedOverrideFilter(filterContext, methodInfo, ResultFilterOverrideMetadataKey);
     }
 
-    private static void ResolveActionScopedFilter<TFilter>(FilterContext filterContext, MethodInfo methodInfo, string metadataKey, Func<TFilter, TFilter> wrapperFactory = null)
+    private static void ResolveActionScopedFilter<TFilter>(FilterContext filterContext, MethodInfo methodInfo, string metadataKey, Func<TFilter, TFilter>? wrapperFactory = null)
         where TFilter : class
     {
         var actionFilters = filterContext.LifetimeScope.Resolve<IEnumerable<Meta<Lazy<TFilter>>>>();
 
-        foreach (var actionFilter in actionFilters.Where(a => a.Metadata.ContainsKey(metadataKey) && a.Metadata[metadataKey] is FilterMetadata))
+        foreach (var actionFilter in actionFilters)
         {
-            var metadata = (FilterMetadata)actionFilter.Metadata[metadataKey];
+            if (!actionFilter.Metadata.TryGetValue(metadataKey, out var metadataValue) || metadataValue is not FilterMetadata metadata)
+            {
+                continue;
+            }
+
             if (!FilterMatchesAction(filterContext, methodInfo, metadata))
             {
                 continue;
@@ -229,9 +227,13 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
     {
         var actionFilters = filterContext.LifetimeScope.Resolve<IEnumerable<Meta<IOverrideFilter>>>();
 
-        foreach (var actionFilter in actionFilters.Where(a => a.Metadata.ContainsKey(metadataKey) && a.Metadata[metadataKey] is FilterMetadata))
+        foreach (var actionFilter in actionFilters)
         {
-            var metadata = (FilterMetadata)actionFilter.Metadata[metadataKey];
+            if (!actionFilter.Metadata.TryGetValue(metadataKey, out var metadataValue) || metadataValue is not FilterMetadata metadata)
+            {
+                continue;
+            }
+
             if (!FilterMatchesAction(filterContext, methodInfo, metadata))
             {
                 continue;
@@ -251,14 +253,18 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
         ResolveControllerScopedOverrideFilter(filterContext, ResultFilterOverrideMetadataKey);
     }
 
-    private static void ResolveControllerScopedFilter<TFilter>(FilterContext filterContext, string metadataKey, Func<TFilter, TFilter> wrapperFactory = null)
+    private static void ResolveControllerScopedFilter<TFilter>(FilterContext filterContext, string metadataKey, Func<TFilter, TFilter>? wrapperFactory = null)
         where TFilter : class
     {
         var actionFilters = filterContext.LifetimeScope.Resolve<IEnumerable<Meta<Lazy<TFilter>>>>();
 
-        foreach (var actionFilter in actionFilters.Where(a => a.Metadata.ContainsKey(metadataKey) && a.Metadata[metadataKey] is FilterMetadata))
+        foreach (var actionFilter in actionFilters)
         {
-            var metadata = (FilterMetadata)actionFilter.Metadata[metadataKey];
+            if (!actionFilter.Metadata.TryGetValue(metadataKey, out var metadataValue) || metadataValue is not FilterMetadata metadata)
+            {
+                continue;
+            }
+
             if (!FilterMatchesController(filterContext, metadata))
             {
                 continue;
@@ -298,9 +304,13 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
     {
         var actionFilters = filterContext.LifetimeScope.Resolve<IEnumerable<Meta<IOverrideFilter>>>();
 
-        foreach (var actionFilter in actionFilters.Where(a => a.Metadata.ContainsKey(metadataKey) && a.Metadata[metadataKey] is FilterMetadata))
+        foreach (var actionFilter in actionFilters)
         {
-            var metadata = (FilterMetadata)actionFilter.Metadata[metadataKey];
+            if (!actionFilter.Metadata.TryGetValue(metadataKey, out var metadataValue) || metadataValue is not FilterMetadata metadata)
+            {
+                continue;
+            }
+
             if (!FilterMatchesController(filterContext, metadata))
             {
                 continue;
@@ -313,24 +323,32 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
 
     private sealed class FilterContext
     {
+        public FilterContext(ActionDescriptor actionDescriptor, Type controllerType, List<Filter> filters, ILifetimeScope lifetimeScope)
+        {
+            ActionDescriptor = actionDescriptor;
+            ControllerType = controllerType;
+            Filters = filters;
+            LifetimeScope = lifetimeScope;
+        }
+
         public ActionDescriptor ActionDescriptor
         {
-            get; set;
+            get;
         }
 
         public Type ControllerType
         {
-            get; set;
+            get;
         }
 
         public List<Filter> Filters
         {
-            get; set;
+            get;
         }
 
         public ILifetimeScope LifetimeScope
         {
-            get; set;
+            get;
         }
     }
 }
