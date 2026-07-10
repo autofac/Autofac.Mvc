@@ -149,7 +149,7 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
     /// </summary>
     /// <remarks>
     /// A single component can be registered as a filter for multiple controllers or
-    /// actions in one statement, so the metadata holds a set of registrations rather
+    /// actions in one statement, so the metadata holds a list of registrations rather
     /// than a single entry (issue #33).
     /// </remarks>
     private static IEnumerable<FilterMetadata>? GetFilterMetadata(IDictionary<string, object?> componentMetadata, string metadataKey)
