@@ -52,10 +52,7 @@ public class ExtensibleActionInvokerTestContext : DependencyResolverReplacementC
 
     public class ActionDependency : IActionDependency
     {
-        public ActionDependencyProperty Property
-        {
-            get; set;
-        }
+        public ActionDependencyProperty Property { get; set; } = null!;
     }
 
     public class ActionDependencyProperty
@@ -64,15 +61,12 @@ public class ExtensibleActionInvokerTestContext : DependencyResolverReplacementC
 
     public class TestController : Controller
     {
-        public IActionDependency Dependency
-        {
-            get; private set;
-        }
+        public IActionDependency Dependency { get; private set; } = null!;
 
         public ActionResult Index(IActionDependency dependency)
         {
             this.Dependency = dependency;
-            return null;
+            return null!;
         }
     }
 }

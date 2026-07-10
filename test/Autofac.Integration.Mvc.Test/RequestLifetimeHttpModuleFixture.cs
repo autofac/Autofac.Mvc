@@ -8,7 +8,7 @@ public class RequestLifetimeHttpModuleFixture
     [Fact]
     public void CannotSetNullLifetimeScopeProvider()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => RequestLifetimeHttpModule.SetLifetimeScopeProvider(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => RequestLifetimeHttpModule.SetLifetimeScopeProvider(null!));
         Assert.Equal("lifetimeScopeProvider", exception.ParamName);
     }
 

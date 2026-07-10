@@ -8,7 +8,7 @@ public class RequestLifetimeScopeProviderFixture
     [Fact]
     public void ContainerMustBeProvided()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => new RequestLifetimeScopeProvider(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => new RequestLifetimeScopeProvider(null!));
         Assert.Equal("container", exception.ParamName);
     }
 

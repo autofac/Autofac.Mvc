@@ -20,13 +20,14 @@ public class AutofacModelBinderProvider : IModelBinderProvider
     /// </summary>
     /// <param name="modelType">Type of the model.</param>
     /// <returns>An <see cref="IModelBinder"/> instance if found; otherwise, <c>null</c>.</returns>
-    public IModelBinder GetBinder(Type modelType)
+    public IModelBinder? GetBinder(Type modelType)
     {
         var modelBinders = DependencyResolver.Current.GetServices<Meta<Lazy<IModelBinder>>>();
 
         var modelBinder = modelBinders
-            .Where(binder => binder.Metadata.ContainsKey(MetadataKey))
-            .FirstOrDefault(binder => ((List<Type>)binder.Metadata[MetadataKey]).Contains(modelType));
+            .FirstOrDefault(binder => binder.Metadata.TryGetValue(MetadataKey, out var supportedTypes)
+                && supportedTypes is List<Type> modelTypes
+                && modelTypes.Contains(modelType));
         return modelBinder?.Value.Value;
     }
 }

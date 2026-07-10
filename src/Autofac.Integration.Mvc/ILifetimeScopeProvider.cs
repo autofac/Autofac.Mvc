@@ -24,7 +24,7 @@ public interface ILifetimeScopeProvider
     /// </param>
     /// <returns>A new or existing nested lifetime scope.</returns>
     [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Method accepts a configuration action parameter.")]
-    ILifetimeScope GetLifetimeScope(Action<ContainerBuilder> configurationAction);
+    ILifetimeScope GetLifetimeScope(Action<ContainerBuilder>? configurationAction);
 
     /// <summary>
     /// Ends the current lifetime scope.

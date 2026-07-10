@@ -15,12 +15,12 @@ public class ActionFilterFixture : AutofacFilterBaseFixture<TestActionFilter, Te
 
     protected override Action<ContainerBuilder> ConfigureActionFilterOverride()
     {
-        return builder => builder.OverrideActionFilterFor<TestController>(c => c.Action1(default));
+        return builder => builder.OverrideActionFilterFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<IRegistrationBuilder<TestActionFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureActionOverrideRegistration()
     {
-        return r => r.AsActionFilterOverrideFor<TestController>(c => c.Action1(default));
+        return r => r.AsActionFilterOverrideFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<ContainerBuilder> ConfigureControllerFilterOverride()
@@ -35,7 +35,7 @@ public class ActionFilterFixture : AutofacFilterBaseFixture<TestActionFilter, Te
 
     protected override Action<IRegistrationBuilder<TestActionFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstActionRegistration()
     {
-        return r => r.AsActionFilterFor<TestController>(c => c.Action1(default));
+        return r => r.AsActionFilterFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<IRegistrationBuilder<TestActionFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstControllerRegistration()
@@ -45,7 +45,7 @@ public class ActionFilterFixture : AutofacFilterBaseFixture<TestActionFilter, Te
 
     protected override Action<IRegistrationBuilder<TestActionFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondActionRegistration()
     {
-        return r => r.AsActionFilterFor<TestController>(c => c.Action1(default), 20);
+        return r => r.AsActionFilterFor<TestController>(c => c.Action1(default!), 20);
     }
 
     protected override Action<IRegistrationBuilder<TestActionFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondControllerRegistration()

@@ -12,11 +12,11 @@ public class AutofacDependencyResolver : IDependencyResolver
 {
     private static Func<AutofacDependencyResolver> _resolverAccessor = DefaultResolverAccessor;
 
-    private readonly Action<ContainerBuilder> _configurationAction;
+    private readonly Action<ContainerBuilder>? _configurationAction;
 
     private readonly ILifetimeScope _container;
 
-    private ILifetimeScopeProvider _lifetimeScopeProvider;
+    private ILifetimeScopeProvider? _lifetimeScopeProvider;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AutofacDependencyResolver"/> class.
@@ -121,7 +121,7 @@ public class AutofacDependencyResolver : IDependencyResolver
     /// </summary>
     /// <param name="serviceType">Type of the service.</param>
     /// <returns>The single instance if resolved; otherwise, <c>null</c>.</returns>
-    public virtual object GetService(Type serviceType)
+    public virtual object? GetService(Type serviceType)
     {
         return RequestLifetimeScope.ResolveOptional(serviceType);
     }

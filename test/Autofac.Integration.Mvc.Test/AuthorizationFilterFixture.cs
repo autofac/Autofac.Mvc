@@ -15,12 +15,12 @@ public class AuthorizationFilterFixture : AutofacFilterBaseFixture<TestAuthoriza
 
     protected override Action<ContainerBuilder> ConfigureActionFilterOverride()
     {
-        return builder => builder.OverrideAuthorizationFilterFor<TestController>(c => c.Action1(default));
+        return builder => builder.OverrideAuthorizationFilterFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<IRegistrationBuilder<TestAuthorizationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureActionOverrideRegistration()
     {
-        return r => r.AsAuthorizationFilterOverrideFor<TestController>(c => c.Action1(default));
+        return r => r.AsAuthorizationFilterOverrideFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<ContainerBuilder> ConfigureControllerFilterOverride()
@@ -35,7 +35,7 @@ public class AuthorizationFilterFixture : AutofacFilterBaseFixture<TestAuthoriza
 
     protected override Action<IRegistrationBuilder<TestAuthorizationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstActionRegistration()
     {
-        return r => r.AsAuthorizationFilterFor<TestController>(c => c.Action1(default));
+        return r => r.AsAuthorizationFilterFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<IRegistrationBuilder<TestAuthorizationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstControllerRegistration()
@@ -45,7 +45,7 @@ public class AuthorizationFilterFixture : AutofacFilterBaseFixture<TestAuthoriza
 
     protected override Action<IRegistrationBuilder<TestAuthorizationFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondActionRegistration()
     {
-        return r => r.AsAuthorizationFilterFor<TestController>(c => c.Action1(default), 20);
+        return r => r.AsAuthorizationFilterFor<TestController>(c => c.Action1(default!), 20);
     }
 
     protected override Action<IRegistrationBuilder<TestAuthorizationFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondControllerRegistration()

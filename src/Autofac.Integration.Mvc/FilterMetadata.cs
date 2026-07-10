@@ -15,7 +15,7 @@ internal class FilterMetadata
     /// Gets or sets the type of the controller.
     /// </summary>
     [DefaultValue(null)]
-    public Type ControllerType
+    public Type? ControllerType
     {
         get; set;
     }
@@ -33,7 +33,7 @@ internal class FilterMetadata
     /// Gets or sets the method info.
     /// </summary>
     [DefaultValue(null)]
-    public MethodInfo MethodInfo
+    public MethodInfo? MethodInfo
     {
         get; set;
     }

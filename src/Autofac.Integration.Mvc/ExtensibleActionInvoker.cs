@@ -20,7 +20,7 @@ public class ExtensibleActionInvoker : System.Web.Mvc.Async.AsyncControllerActio
     /// <summary>
     /// If set, this is used to determine which model properties are injected.
     /// </summary>
-    private readonly IPropertySelector _propertySelector;
+    private readonly IPropertySelector? _propertySelector;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExtensibleActionInvoker"/> class.
@@ -48,7 +48,7 @@ public class ExtensibleActionInvoker : System.Web.Mvc.Async.AsyncControllerActio
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="parameterDescriptor" /> is <see langword="null" />.
     /// </exception>
-    protected override object GetParameterValue(ControllerContext controllerContext, ParameterDescriptor parameterDescriptor)
+    protected override object? GetParameterValue(ControllerContext controllerContext, ParameterDescriptor parameterDescriptor)
     {
         if (parameterDescriptor == null)
         {
@@ -71,7 +71,7 @@ public class ExtensibleActionInvoker : System.Web.Mvc.Async.AsyncControllerActio
         // we need to try model binding first. Unfortunately there's no way
         // to determine if default model binding will fail, so we give it
         // a shot and handle what we can.
-        var value = (object)null;
+        var value = (object?)null;
         try
         {
             value = base.GetParameterValue(controllerContext, parameterDescriptor);

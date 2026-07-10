@@ -767,6 +767,7 @@ public static class RegistrationExtensions
     private static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
         AsFilterFor<TFilter, TController>(IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration, string metadataKey, int order)
         where TController : IController
+        where TFilter : notnull
     {
         if (registration == null)
         {
@@ -799,6 +800,7 @@ public static class RegistrationExtensions
     private static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
         AsFilterFor<TFilter, TController>(IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration, string metadataKey, Expression<Action<TController>> actionSelector, int order)
         where TController : IController
+        where TFilter : notnull
     {
         if (registration == null)
         {

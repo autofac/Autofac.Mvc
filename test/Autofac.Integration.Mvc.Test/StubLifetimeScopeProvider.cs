@@ -9,7 +9,7 @@ public class StubLifetimeScopeProvider : ILifetimeScopeProvider
 {
     private readonly ILifetimeScope _container;
 
-    private ILifetimeScope _lifetimeScope;
+    private ILifetimeScope? _lifetimeScope;
 
     public StubLifetimeScopeProvider(ILifetimeScope container)
     {
@@ -29,12 +29,12 @@ public class StubLifetimeScopeProvider : ILifetimeScopeProvider
         return this._lifetimeScope != null ? this._lifetimeScope.DisposeAsync() : default;
     }
 
-    public ILifetimeScope GetLifetimeScope(Action<ContainerBuilder> configurationAction)
+    public ILifetimeScope GetLifetimeScope(Action<ContainerBuilder>? configurationAction)
     {
         return _lifetimeScope ??= BuildLifetimeScope(configurationAction);
     }
 
-    private ILifetimeScope BuildLifetimeScope(Action<ContainerBuilder> configurationAction)
+    private ILifetimeScope BuildLifetimeScope(Action<ContainerBuilder>? configurationAction)
     {
         return (configurationAction == null)
                    ? this._container.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag)
