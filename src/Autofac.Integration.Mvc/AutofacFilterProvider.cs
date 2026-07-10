@@ -94,7 +94,7 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
         var filters = base.GetFilters(controllerContext, actionDescriptor).ToList();
         var lifetimeScope = AutofacDependencyResolver.Current.RequestLifetimeScope;
 
-        if (lifetimeScope != null)
+        if (lifetimeScope != null && controllerContext.Controller != null)
         {
             foreach (var filter in filters)
             {

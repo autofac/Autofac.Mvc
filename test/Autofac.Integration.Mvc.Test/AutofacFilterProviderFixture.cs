@@ -48,6 +48,22 @@ public class AutofacFilterProviderFixture : IClassFixture<DependencyResolverRepl
     }
 
     [Fact]
+    public void NullControllerInstanceIsSkipped()
+    {
+        // Issue #24: when the controller instance is null, the provider should
+        // skip filter evaluation rather than throwing a NullReferenceException,
+        // matching the behavior of the base FilterAttributeFilterProvider.
+        var builder = new ContainerBuilder();
+        var container = builder.Build();
+        SetupMockLifetimeScopeProvider(container);
+        var provider = new AutofacFilterProvider();
+        var controllerContext = new ControllerContext { Controller = null };
+
+        var filters = provider.GetFilters(controllerContext, this._reflectedActionDescriptor).ToList();
+        Assert.Empty(filters);
+    }
+
+    [Fact]
     public void FilterRegistrationsWithoutMetadataIgnored()
     {
         var builder = new ContainerBuilder();
