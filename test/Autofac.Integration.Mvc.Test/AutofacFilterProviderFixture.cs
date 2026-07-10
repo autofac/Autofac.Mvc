@@ -48,6 +48,55 @@ public class AutofacFilterProviderFixture : IClassFixture<DependencyResolverRepl
     }
 
     [Fact]
+    public void CanRegisterSingleFilterAgainstMultipleControllersInOneStatement()
+    {
+        // Issue #33: chaining AsActionFilterFor for more than one controller in a
+        // single registration statement must not throw "An item with the same key
+        // has already been added" and must apply the filter to each controller.
+        var builder = new ContainerBuilder();
+        builder.Register(c => new TestActionFilter())
+            .AsActionFilterFor<TestController>()
+            .AsActionFilterFor<TestControllerB>();
+        var container = builder.Build();
+        SetupMockLifetimeScopeProvider(container);
+        var provider = new AutofacFilterProvider();
+
+        var controllerBContext = new ControllerContext { Controller = new TestControllerB() };
+        var controllerBDescriptor = new ReflectedActionDescriptor(
+            TestController.GetAction1MethodInfo<TestControllerB>(),
+            this._actionName,
+            this._controllerDescriptor);
+
+        var baseFilters = provider.GetFilters(this._baseControllerContext, this._reflectedActionDescriptor).ToList();
+        var derivedFilters = provider.GetFilters(controllerBContext, controllerBDescriptor).ToList();
+
+        Assert.Single(baseFilters);
+        Assert.IsType<TestActionFilter>(baseFilters[0].Instance);
+        Assert.Single(derivedFilters);
+        Assert.IsType<TestActionFilter>(derivedFilters[0].Instance);
+    }
+
+    [Fact]
+    public void CanRegisterSingleFilterAgainstMultipleActionsInOneStatement()
+    {
+        // Issue #33: the same collision occurs for action-scoped registrations
+        // chained in a single statement.
+        var builder = new ContainerBuilder();
+        builder.Register(c => new TestActionFilter())
+            .AsActionFilterFor<TestController>(c => c.Action1(default!))
+            .AsActionFilterFor<TestControllerB>(c => c.Action1(default!));
+        var container = builder.Build();
+        SetupMockLifetimeScopeProvider(container);
+        var provider = new AutofacFilterProvider();
+
+        var filters = provider.GetFilters(this._baseControllerContext, this._reflectedActionDescriptor).ToList();
+
+        Assert.Single(filters);
+        Assert.IsType<TestActionFilter>(filters[0].Instance);
+        Assert.Equal(FilterScope.Action, filters[0].Scope);
+    }
+
+    [Fact]
     public void NullControllerInstanceIsSkipped()
     {
         // Issue #24: when the controller instance is null, the provider should

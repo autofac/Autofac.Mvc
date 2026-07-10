@@ -794,7 +794,10 @@ public static class RegistrationExtensions
             Order = order,
         };
 
-        return registration.As<TFilter>().WithMetadata(metadataKey, metadata);
+        registration = registration.GetOrCreateMetadata(metadataKey, out var metadataCollection);
+        metadataCollection.Filters.Add(metadata);
+
+        return registration.As<TFilter>();
     }
 
     private static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle>
@@ -833,7 +836,10 @@ public static class RegistrationExtensions
             Order = order,
         };
 
-        return registration.As<TFilter>().WithMetadata(metadataKey, metadata);
+        registration = registration.GetOrCreateMetadata(metadataKey, out var metadataCollection);
+        metadataCollection.Filters.Add(metadata);
+
+        return registration.As<TFilter>();
     }
 
     private static void AsOverrideFor<TFilter, TController>(ContainerBuilder builder, string metadataKey)
@@ -845,9 +851,12 @@ public static class RegistrationExtensions
             MethodInfo = null,
         };
 
+        var metadataCollection = new FilterMetadataCollection();
+        metadataCollection.Filters.Add(metadata);
+
         builder.RegisterInstance(new AutofacOverrideFilter(typeof(TFilter)))
             .As<IOverrideFilter>()
-            .WithMetadata(metadataKey, metadata);
+            .WithMetadata(metadataKey, metadataCollection);
     }
 
     private static void AsOverrideFor<TFilter, TController>(ContainerBuilder builder, string metadataKey, Expression<Action<TController>> actionSelector)
@@ -864,9 +873,12 @@ public static class RegistrationExtensions
             MethodInfo = GetMethodInfo(actionSelector),
         };
 
+        var metadataCollection = new FilterMetadataCollection();
+        metadataCollection.Filters.Add(metadata);
+
         builder.RegisterInstance(new AutofacOverrideFilter(typeof(TFilter)))
             .As<IOverrideFilter>()
-            .WithMetadata(metadataKey, metadata);
+            .WithMetadata(metadataKey, metadataCollection);
     }
 
     private static MethodInfo GetMethodInfo(LambdaExpression expression)
@@ -874,5 +886,26 @@ public static class RegistrationExtensions
         return expression.Body is not MethodCallExpression outermostExpression
             ? throw new ArgumentException(RegistrationExtensionsResources.InvalidActionExpress)
             : outermostExpression.Method;
+    }
+
+    /// <summary>
+    /// Retrieves the existing <see cref="FilterMetadataCollection"/> for the given
+    /// metadata key, or creates and attaches a new one. This lets a single filter be
+    /// registered against multiple controllers/actions in one fluent statement without
+    /// the metadata key colliding (issue #33).
+    /// </summary>
+    private static IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> GetOrCreateMetadata(
+        this IRegistrationBuilder<object, IConcreteActivatorData, SingleRegistrationStyle> registration,
+        string metadataKey,
+        out FilterMetadataCollection metadataCollection)
+    {
+        if (registration.RegistrationData.Metadata.TryGetValue(metadataKey, out var existing) && existing is FilterMetadataCollection collection)
+        {
+            metadataCollection = collection;
+            return registration;
+        }
+
+        metadataCollection = new FilterMetadataCollection();
+        return registration.WithMetadata(metadataKey, metadataCollection);
     }
 }

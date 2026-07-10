@@ -536,7 +536,8 @@ public class RegistrationExtensionsFixture
 
         var service = container.Resolve<Meta<TService>>();
 
-        var metadata = (FilterMetadata)service.Metadata[metadataKey]!;
+        var metadataCollection = (FilterMetadataCollection)service.Metadata[metadataKey]!;
+        var metadata = Assert.Single(metadataCollection.Filters);
 
         Assert.Equal(typeof(TestController), metadata.ControllerType);
         Assert.Equal(filterScope, metadata.FilterScope);
