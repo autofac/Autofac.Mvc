@@ -143,6 +143,22 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
                && metadata.MethodInfo == null;
     }
 
+    /// <summary>
+    /// Gets the collection of filter registrations stored on a component's metadata
+    /// for the given key, or <see langword="null" /> if none is present.
+    /// </summary>
+    /// <remarks>
+    /// A single component can be registered as a filter for multiple controllers or
+    /// actions in one statement, so the metadata holds a list of registrations rather
+    /// than a single entry (issue #33).
+    /// </remarks>
+    private static IEnumerable<FilterMetadata>? GetFilterMetadata(IDictionary<string, object?> componentMetadata, string metadataKey)
+    {
+        return componentMetadata.TryGetValue(metadataKey, out var metadataValue) && metadataValue is FilterMetadataCollection collection
+            ? collection.Filters
+            : null;
+    }
+
     private static void ResolveActionScopedEmptyOverrideFilters<T>(FilterContext filterContext, Func<T, MethodInfo> methodSelector)
         where T : ActionDescriptor
     {
@@ -167,12 +183,16 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
 
         foreach (var actionFilter in actionFilters)
         {
-            if (!actionFilter.Metadata.TryGetValue(metadataKey, out var metadataValue) || metadataValue is not FilterMetadata metadata)
+            var metadataSet = GetFilterMetadata(actionFilter.Metadata, metadataKey);
+            if (metadataSet == null)
             {
                 continue;
             }
 
-            if (!FilterMatchesAction(filterContext, methodInfo, metadata))
+            // A single component can be registered against multiple controllers or
+            // actions, so add it once for the first registration that matches this action.
+            var metadata = metadataSet.FirstOrDefault(m => FilterMatchesAction(filterContext, methodInfo, m));
+            if (metadata == null)
             {
                 continue;
             }
@@ -229,12 +249,14 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
 
         foreach (var actionFilter in actionFilters)
         {
-            if (!actionFilter.Metadata.TryGetValue(metadataKey, out var metadataValue) || metadataValue is not FilterMetadata metadata)
+            var metadataSet = GetFilterMetadata(actionFilter.Metadata, metadataKey);
+            if (metadataSet == null)
             {
                 continue;
             }
 
-            if (!FilterMatchesAction(filterContext, methodInfo, metadata))
+            var metadata = metadataSet.FirstOrDefault(m => FilterMatchesAction(filterContext, methodInfo, m));
+            if (metadata == null)
             {
                 continue;
             }
@@ -260,12 +282,14 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
 
         foreach (var actionFilter in actionFilters)
         {
-            if (!actionFilter.Metadata.TryGetValue(metadataKey, out var metadataValue) || metadataValue is not FilterMetadata metadata)
+            var metadataSet = GetFilterMetadata(actionFilter.Metadata, metadataKey);
+            if (metadataSet == null)
             {
                 continue;
             }
 
-            if (!FilterMatchesController(filterContext, metadata))
+            var metadata = metadataSet.FirstOrDefault(m => FilterMatchesController(filterContext, m));
+            if (metadata == null)
             {
                 continue;
             }
@@ -306,12 +330,14 @@ public class AutofacFilterProvider : FilterAttributeFilterProvider
 
         foreach (var actionFilter in actionFilters)
         {
-            if (!actionFilter.Metadata.TryGetValue(metadataKey, out var metadataValue) || metadataValue is not FilterMetadata metadata)
+            var metadataSet = GetFilterMetadata(actionFilter.Metadata, metadataKey);
+            if (metadataSet == null)
             {
                 continue;
             }
 
-            if (!FilterMatchesController(filterContext, metadata))
+            var metadata = metadataSet.FirstOrDefault(m => FilterMatchesController(filterContext, m));
+            if (metadata == null)
             {
                 continue;
             }
