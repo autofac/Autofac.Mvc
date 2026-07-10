@@ -1,8 +1,7 @@
 {
   "recommendations": [
-    "formulahendry.dotnet-test-explorer",
-    "ms-dotnettools.csharp",
+    "davidanson.vscode-markdownlint",
     "editorconfig.editorconfig",
-    "davidanson.vscode-markdownlint"
+    "ms-dotnettools.csdevkit"
   ]
 }

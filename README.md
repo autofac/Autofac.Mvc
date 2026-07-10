@@ -2,7 +2,7 @@
 
 ASP.NET MVC integration for [Autofac](https://autofac.org).
 
-[![Build status](https://github.com/autofac/Autofac.Mvc/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/autofac/Autofac.Mvc/actions/workflows/ci.yml)
+[![Build status](https://github.com/autofac/Autofac.Mvc/actions/workflows/main.yml/badge.svg)](https://github.com/autofac/Autofac.Mvc/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/Autofac/Autofac.Mvc/branch/develop/graph/badge.svg)](https://codecov.io/gh/Autofac/Autofac.Mvc) [![NuGet](https://img.shields.io/nuget/v/Autofac.Mvc5.svg)](https://nuget.org/packages/Autofac.Mvc5)
 
 Please file issues and pull requests for this package [in this repository](https://github.com/autofac/Autofac.Mvc/issues) rather than in the Autofac core repo.
 
@@ -17,7 +17,7 @@ If you're working with ASP.NET Core, you want [Autofac.Extensions.DependencyInje
 
 To get Autofac integrated with MVC you need to reference this MVC integration NuGet package, register your controllers, and set the dependency resolver. You can optionally enable other features as well.
 
-```c#
+```csharp
 protected void Application_Start()
 {
   var builder = new ContainerBuilder();
