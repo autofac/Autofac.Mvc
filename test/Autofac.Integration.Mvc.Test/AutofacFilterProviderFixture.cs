@@ -56,24 +56,23 @@ public class AutofacFilterProviderFixture : IClassFixture<DependencyResolverRepl
         var builder = new ContainerBuilder();
         builder.Register(c => new TestActionFilter())
             .AsActionFilterFor<TestController>()
-            .AsActionFilterFor<TestControllerB>();
+            .AsActionFilterFor<IsAControllerNot>();
         var container = builder.Build();
         SetupMockLifetimeScopeProvider(container);
         var provider = new AutofacFilterProvider();
 
-        var controllerBContext = new ControllerContext { Controller = new TestControllerB() };
-        var controllerBDescriptor = new ReflectedActionDescriptor(
-            TestController.GetAction1MethodInfo<TestControllerB>(),
-            this._actionName,
-            this._controllerDescriptor);
+        // IsAControllerNot is unrelated to TestController, so only the second
+        // registration can match it. Resolving each controller independently
+        // proves both chained registrations took effect (not just the first).
+        var otherContext = new ControllerContext { Controller = new IsAControllerNot() };
 
-        var baseFilters = provider.GetFilters(this._baseControllerContext, this._reflectedActionDescriptor).ToList();
-        var derivedFilters = provider.GetFilters(controllerBContext, controllerBDescriptor).ToList();
+        var testControllerFilters = provider.GetFilters(this._baseControllerContext, this._reflectedActionDescriptor).ToList();
+        var otherControllerFilters = provider.GetFilters(otherContext, this._reflectedActionDescriptor).ToList();
 
-        Assert.Single(baseFilters);
-        Assert.IsType<TestActionFilter>(baseFilters[0].Instance);
-        Assert.Single(derivedFilters);
-        Assert.IsType<TestActionFilter>(derivedFilters[0].Instance);
+        Assert.Single(testControllerFilters);
+        Assert.IsType<TestActionFilter>(testControllerFilters[0].Instance);
+        Assert.Single(otherControllerFilters);
+        Assert.IsType<TestActionFilter>(otherControllerFilters[0].Instance);
     }
 
     [Fact]
@@ -84,16 +83,29 @@ public class AutofacFilterProviderFixture : IClassFixture<DependencyResolverRepl
         var builder = new ContainerBuilder();
         builder.Register(c => new TestActionFilter())
             .AsActionFilterFor<TestController>(c => c.Action1(default!))
-            .AsActionFilterFor<TestControllerB>(c => c.Action1(default!));
+            .AsActionFilterFor<TestController>(c => c.Action2(default));
         var container = builder.Build();
         SetupMockLifetimeScopeProvider(container);
         var provider = new AutofacFilterProvider();
 
-        var filters = provider.GetFilters(this._baseControllerContext, this._reflectedActionDescriptor).ToList();
+        // Action1 and Action2 are distinct methods, so each registration matches
+        // only its own action. Resolving each action independently proves both
+        // chained registrations took effect (not just the first).
+        var action2Descriptor = new ReflectedActionDescriptor(
+            typeof(TestController).GetMethod(nameof(TestController.Action2)),
+            nameof(TestController.Action2),
+            this._controllerDescriptor);
 
-        Assert.Single(filters);
-        Assert.IsType<TestActionFilter>(filters[0].Instance);
-        Assert.Equal(FilterScope.Action, filters[0].Scope);
+        var action1Filters = provider.GetFilters(this._baseControllerContext, this._reflectedActionDescriptor).ToList();
+        var action2Filters = provider.GetFilters(this._baseControllerContext, action2Descriptor).ToList();
+
+        Assert.Single(action1Filters);
+        Assert.IsType<TestActionFilter>(action1Filters[0].Instance);
+        Assert.Equal(FilterScope.Action, action1Filters[0].Scope);
+
+        Assert.Single(action2Filters);
+        Assert.IsType<TestActionFilter>(action2Filters[0].Instance);
+        Assert.Equal(FilterScope.Action, action2Filters[0].Scope);
     }
 
     [Fact]
