@@ -15,12 +15,12 @@ public class ExceptionFilterFixture : AutofacFilterBaseFixture<TestExceptionFilt
 
     protected override Action<ContainerBuilder> ConfigureActionFilterOverride()
     {
-        return builder => builder.OverrideExceptionFilterFor<TestController>(c => c.Action1(default));
+        return builder => builder.OverrideExceptionFilterFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<IRegistrationBuilder<TestExceptionFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureActionOverrideRegistration()
     {
-        return r => r.AsExceptionFilterOverrideFor<TestController>(c => c.Action1(default));
+        return r => r.AsExceptionFilterOverrideFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<ContainerBuilder> ConfigureControllerFilterOverride()
@@ -35,7 +35,7 @@ public class ExceptionFilterFixture : AutofacFilterBaseFixture<TestExceptionFilt
 
     protected override Action<IRegistrationBuilder<TestExceptionFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstActionRegistration()
     {
-        return r => r.AsExceptionFilterFor<TestController>(c => c.Action1(default));
+        return r => r.AsExceptionFilterFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<IRegistrationBuilder<TestExceptionFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstControllerRegistration()
@@ -45,7 +45,7 @@ public class ExceptionFilterFixture : AutofacFilterBaseFixture<TestExceptionFilt
 
     protected override Action<IRegistrationBuilder<TestExceptionFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondActionRegistration()
     {
-        return r => r.AsExceptionFilterFor<TestController>(c => c.Action1(default), 20);
+        return r => r.AsExceptionFilterFor<TestController>(c => c.Action1(default!), 20);
     }
 
     protected override Action<IRegistrationBuilder<TestExceptionFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondControllerRegistration()

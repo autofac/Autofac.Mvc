@@ -120,11 +120,11 @@ public class AutofacDependencyResolverFixture : IClassFixture<DependencyResolver
         var container = new ContainerBuilder().Build();
 
         var exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(container, (Action<ContainerBuilder>)null));
+            () => new AutofacDependencyResolver(container, (Action<ContainerBuilder>)null!));
         Assert.Equal("configurationAction", exception.ParamName);
 
         exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(container, Substitute.For<ILifetimeScopeProvider>(), null));
+            () => new AutofacDependencyResolver(container, Substitute.For<ILifetimeScopeProvider>(), null!));
         Assert.Equal("configurationAction", exception.ParamName);
     }
 
@@ -132,19 +132,19 @@ public class AutofacDependencyResolverFixture : IClassFixture<DependencyResolver
     public void NullContainerThrowsException()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(null));
+            () => new AutofacDependencyResolver(null!));
         Assert.Equal("container", exception.ParamName);
 
         exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(null, cb => { }));
+            () => new AutofacDependencyResolver(null!, cb => { }));
         Assert.Equal("container", exception.ParamName);
 
         exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(null, Substitute.For<ILifetimeScopeProvider>()));
+            () => new AutofacDependencyResolver(null!, Substitute.For<ILifetimeScopeProvider>()));
         Assert.Equal("container", exception.ParamName);
 
         exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(null, Substitute.For<ILifetimeScopeProvider>(), cb => { }));
+            () => new AutofacDependencyResolver(null!, Substitute.For<ILifetimeScopeProvider>(), cb => { }));
         Assert.Equal("container", exception.ParamName);
     }
 
@@ -154,11 +154,11 @@ public class AutofacDependencyResolverFixture : IClassFixture<DependencyResolver
         var container = new ContainerBuilder().Build();
 
         var exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(container, (ILifetimeScopeProvider)null));
+            () => new AutofacDependencyResolver(container, (ILifetimeScopeProvider)null!));
         Assert.Equal("lifetimeScopeProvider", exception.ParamName);
 
         exception = Assert.Throws<ArgumentNullException>(
-            () => new AutofacDependencyResolver(container, null, cb => { }));
+            () => new AutofacDependencyResolver(container, null!, cb => { }));
         Assert.Equal("lifetimeScopeProvider", exception.ParamName);
     }
 
@@ -169,7 +169,7 @@ public class AutofacDependencyResolverFixture : IClassFixture<DependencyResolver
         {
         }
 
-        public override object GetService(Type serviceType)
+        public override object? GetService(Type serviceType)
         {
             return serviceType == typeof(object) ? new object() : base.GetService(serviceType);
         }

@@ -16,12 +16,12 @@ public class AuthenticationFilterFixture : AutofacFilterBaseFixture<TestAuthenti
 
     protected override Action<ContainerBuilder> ConfigureActionFilterOverride()
     {
-        return builder => builder.OverrideAuthenticationFilterFor<TestController>(c => c.Action1(default));
+        return builder => builder.OverrideAuthenticationFilterFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<IRegistrationBuilder<TestAuthenticationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureActionOverrideRegistration()
     {
-        return r => r.AsAuthenticationFilterOverrideFor<TestController>(c => c.Action1(default));
+        return r => r.AsAuthenticationFilterOverrideFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<ContainerBuilder> ConfigureControllerFilterOverride()
@@ -36,7 +36,7 @@ public class AuthenticationFilterFixture : AutofacFilterBaseFixture<TestAuthenti
 
     protected override Action<IRegistrationBuilder<TestAuthenticationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstActionRegistration()
     {
-        return r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default));
+        return r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default!));
     }
 
     protected override Action<IRegistrationBuilder<TestAuthenticationFilter, SimpleActivatorData, SingleRegistrationStyle>> ConfigureFirstControllerRegistration()
@@ -46,7 +46,7 @@ public class AuthenticationFilterFixture : AutofacFilterBaseFixture<TestAuthenti
 
     protected override Action<IRegistrationBuilder<TestAuthenticationFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondActionRegistration()
     {
-        return r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default), 20);
+        return r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default!), 20);
     }
 
     protected override Action<IRegistrationBuilder<TestAuthenticationFilter2, SimpleActivatorData, SingleRegistrationStyle>> ConfigureSecondControllerRegistration()

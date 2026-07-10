@@ -6,8 +6,8 @@ using Autofac.Builder;
 namespace Autofac.Integration.Mvc.Test;
 
 public abstract class AutofacFilterBaseFixture<TFilter1, TFilter2, TFilterType> : IClassFixture<AutofacFilterTestContext>
-    where TFilter1 : new()
-    where TFilter2 : new()
+    where TFilter1 : notnull, new()
+    where TFilter2 : notnull, new()
 {
     protected AutofacFilterBaseFixture(AutofacFilterTestContext testContext)
     {

@@ -17,7 +17,7 @@ public class RegistrationExtensionsFixture
         AssertFilterRegistration<TestActionFilter, IActionFilter>(
             FilterScope.Action,
             TestController.GetAction1MethodInfo<TestController>(),
-            r => r.AsActionFilterFor<TestController>(c => c.Action1(default), 20),
+            r => r.AsActionFilterFor<TestController>(c => c.Action1(default!), 20),
             AutofacFilterProvider.ActionFilterMetadataKey);
     }
 
@@ -26,8 +26,8 @@ public class RegistrationExtensionsFixture
     {
         var exception = Assert.Throws<ArgumentNullException>(() =>
             Autofac.Integration.Mvc.RegistrationExtensions.AsActionFilterFor<TestController>(
-                null,
-                c => c.Action1(default)));
+                null!,
+                c => c.Action1(default!)));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -46,7 +46,7 @@ public class RegistrationExtensionsFixture
     public void AsActionFilterForControllerScopedFilterThrowsExceptionForNullRegistration()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Autofac.Integration.Mvc.RegistrationExtensions.AsActionFilterFor<TestController>(null));
+            () => Autofac.Integration.Mvc.RegistrationExtensions.AsActionFilterFor<TestController>(null!));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -56,7 +56,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var exception = Assert.Throws<ArgumentNullException>(
-            () => builder.Register(c => new TestActionFilter()).AsActionFilterFor<TestController>(null));
+            () => builder.Register(c => new TestActionFilter()).AsActionFilterFor<TestController>(null!));
         Assert.Equal("actionSelector", exception.ParamName);
     }
 
@@ -77,7 +77,7 @@ public class RegistrationExtensionsFixture
         AssertFilterRegistration<TestAuthenticationFilter, IAuthenticationFilter>(
             FilterScope.Action,
             TestController.GetAction1MethodInfo<TestController>(),
-            r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default), 20),
+            r => r.AsAuthenticationFilterFor<TestController>(c => c.Action1(default!), 20),
             AutofacFilterProvider.AuthenticationFilterMetadataKey);
     }
 
@@ -86,8 +86,8 @@ public class RegistrationExtensionsFixture
     {
         var exception = Assert.Throws<ArgumentNullException>(() =>
             Autofac.Integration.Mvc.RegistrationExtensions.AsAuthenticationFilterFor<TestController>(
-                null,
-                c => c.Action1(default)));
+                null!,
+                c => c.Action1(default!)));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -106,7 +106,7 @@ public class RegistrationExtensionsFixture
     public void AsAuthenticationFilterForControllerScopedFilterThrowsExceptionForNullRegistration()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Autofac.Integration.Mvc.RegistrationExtensions.AsAuthenticationFilterFor<TestController>(null));
+            () => Autofac.Integration.Mvc.RegistrationExtensions.AsAuthenticationFilterFor<TestController>(null!));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -116,7 +116,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var exception = Assert.Throws<ArgumentNullException>(
-            () => builder.Register(c => new TestAuthenticationFilter()).AsAuthenticationFilterFor<TestController>(null));
+            () => builder.Register(c => new TestAuthenticationFilter()).AsAuthenticationFilterFor<TestController>(null!));
         Assert.Equal("actionSelector", exception.ParamName);
     }
 
@@ -137,7 +137,7 @@ public class RegistrationExtensionsFixture
         AssertFilterRegistration<TestAuthorizationFilter, IAuthorizationFilter>(
             FilterScope.Action,
             TestController.GetAction1MethodInfo<TestController>(),
-            r => r.AsAuthorizationFilterFor<TestController>(c => c.Action1(default), 20),
+            r => r.AsAuthorizationFilterFor<TestController>(c => c.Action1(default!), 20),
             AutofacFilterProvider.AuthorizationFilterMetadataKey);
     }
 
@@ -146,8 +146,8 @@ public class RegistrationExtensionsFixture
     {
         var exception = Assert.Throws<ArgumentNullException>(() =>
             Autofac.Integration.Mvc.RegistrationExtensions.AsAuthorizationFilterFor<TestController>(
-                null,
-                c => c.Action1(default)));
+                null!,
+                c => c.Action1(default!)));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -166,7 +166,7 @@ public class RegistrationExtensionsFixture
     public void AsAuthorizationFilterForControllerScopedFilterThrowsExceptionForNullRegistration()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Autofac.Integration.Mvc.RegistrationExtensions.AsAuthorizationFilterFor<TestController>(null));
+            () => Autofac.Integration.Mvc.RegistrationExtensions.AsAuthorizationFilterFor<TestController>(null!));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -176,7 +176,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var exception = Assert.Throws<ArgumentNullException>(
-            () => builder.Register(c => new TestAuthorizationFilter()).AsAuthorizationFilterFor<TestController>(null));
+            () => builder.Register(c => new TestAuthorizationFilter()).AsAuthorizationFilterFor<TestController>(null!));
         Assert.Equal("actionSelector", exception.ParamName);
     }
 
@@ -197,7 +197,7 @@ public class RegistrationExtensionsFixture
         AssertFilterRegistration<TestExceptionFilter, IExceptionFilter>(
             FilterScope.Action,
             TestController.GetAction1MethodInfo<TestController>(),
-            r => r.AsExceptionFilterFor<TestController>(c => c.Action1(default), 20),
+            r => r.AsExceptionFilterFor<TestController>(c => c.Action1(default!), 20),
             AutofacFilterProvider.ExceptionFilterMetadataKey);
     }
 
@@ -206,8 +206,8 @@ public class RegistrationExtensionsFixture
     {
         var exception = Assert.Throws<ArgumentNullException>(() =>
             Autofac.Integration.Mvc.RegistrationExtensions.AsExceptionFilterFor<TestController>(
-                null,
-                c => c.Action1(default)));
+                null!,
+                c => c.Action1(default!)));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -226,7 +226,7 @@ public class RegistrationExtensionsFixture
     public void AsExceptionFilterForControllerScopedFilterThrowsExceptionForNullRegistration()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Autofac.Integration.Mvc.RegistrationExtensions.AsExceptionFilterFor<TestController>(null));
+            () => Autofac.Integration.Mvc.RegistrationExtensions.AsExceptionFilterFor<TestController>(null!));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -236,7 +236,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var exception = Assert.Throws<ArgumentNullException>(
-            () => builder.Register(c => new TestExceptionFilter()).AsExceptionFilterFor<TestController>(null));
+            () => builder.Register(c => new TestExceptionFilter()).AsExceptionFilterFor<TestController>(null!));
         Assert.Equal("actionSelector", exception.ParamName);
     }
 
@@ -254,7 +254,7 @@ public class RegistrationExtensionsFixture
     [Fact]
     public void AsModelBinderForTypesRegistersInstanceModelBinder()
     {
-        var originalResolver = (IDependencyResolver)null;
+        var originalResolver = (IDependencyResolver)null!;
         try
         {
             originalResolver = DependencyResolver.Current;
@@ -275,7 +275,7 @@ public class RegistrationExtensionsFixture
     [Fact]
     public void AsModelBinderForTypesRegistersTypeModelBinder()
     {
-        var originalResolver = (IDependencyResolver)null;
+        var originalResolver = (IDependencyResolver)null!;
         try
         {
             originalResolver = DependencyResolver.Current;
@@ -305,14 +305,14 @@ public class RegistrationExtensionsFixture
     [Fact]
     public void AsModelBinderForTypesThrowsExceptionForNullRegistration()
     {
-        var registration = (IRegistrationBuilder<RegistrationExtensionsFixture, ConcreteReflectionActivatorData, SingleRegistrationStyle>)null;
+        var registration = (IRegistrationBuilder<RegistrationExtensionsFixture, ConcreteReflectionActivatorData, SingleRegistrationStyle>)null!;
         Assert.Throws<ArgumentNullException>(() => registration.AsModelBinderForTypes(typeof(TestModel1)));
     }
 
     [Fact]
     public void AsModelBinderForTypesThrowsExceptionForNullTypeList()
     {
-        var types = (Type[])null;
+        var types = (Type[])null!;
         var builder = new ContainerBuilder();
         var registration = builder.RegisterType<TestModelBinder>();
         Assert.Throws<ArgumentNullException>(() => registration.AsModelBinderForTypes(types));
@@ -323,7 +323,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var registration = builder.RegisterType<TestModelBinder>();
-        Assert.Throws<ArgumentException>(() => registration.AsModelBinderForTypes(null, null, null));
+        Assert.Throws<ArgumentException>(() => registration.AsModelBinderForTypes(null!, null!, null!));
     }
 
     [Fact]
@@ -332,7 +332,7 @@ public class RegistrationExtensionsFixture
         AssertFilterRegistration<TestResultFilter, IResultFilter>(
             FilterScope.Action,
             TestController.GetAction1MethodInfo<TestController>(),
-            r => r.AsResultFilterFor<TestController>(c => c.Action1(default), 20),
+            r => r.AsResultFilterFor<TestController>(c => c.Action1(default!), 20),
             AutofacFilterProvider.ResultFilterMetadataKey);
     }
 
@@ -341,8 +341,8 @@ public class RegistrationExtensionsFixture
     {
         var exception = Assert.Throws<ArgumentNullException>(() =>
             Autofac.Integration.Mvc.RegistrationExtensions.AsResultFilterFor<TestController>(
-                null,
-                c => c.Action1(default)));
+                null!,
+                c => c.Action1(default!)));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -361,7 +361,7 @@ public class RegistrationExtensionsFixture
     public void AsResultFilterForControllerScopedFilterThrowsExceptionForNullRegistration()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Autofac.Integration.Mvc.RegistrationExtensions.AsResultFilterFor<TestController>(null));
+            () => Autofac.Integration.Mvc.RegistrationExtensions.AsResultFilterFor<TestController>(null!));
 
         Assert.Equal("registration", exception.ParamName);
     }
@@ -371,7 +371,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var exception = Assert.Throws<ArgumentNullException>(
-            () => builder.Register(c => new TestResultFilter()).AsResultFilterFor<TestController>(null));
+            () => builder.Register(c => new TestResultFilter()).AsResultFilterFor<TestController>(null!));
         Assert.Equal("actionSelector", exception.ParamName);
     }
 
@@ -390,7 +390,7 @@ public class RegistrationExtensionsFixture
     public void CacheInSessionThrowsExceptionForNullRegistration()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Autofac.Integration.Mvc.RegistrationExtensions.CacheInSession<object, SimpleActivatorData, SingleRegistrationStyle>(null));
+            () => Autofac.Integration.Mvc.RegistrationExtensions.CacheInSession<object, SimpleActivatorData, SingleRegistrationStyle>(null!));
         Assert.Equal("registration", exception.ParamName);
     }
 
@@ -437,7 +437,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var exception = Assert.Throws<ArgumentNullException>(
-            () => builder.OverrideActionFilterFor<TestController>(null));
+            () => builder.OverrideActionFilterFor<TestController>(null!));
         Assert.Equal("actionSelector", exception.ParamName);
     }
 
@@ -447,7 +447,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var exception = Assert.Throws<ArgumentNullException>(
-            () => builder.OverrideAuthenticationFilterFor<TestController>(null));
+            () => builder.OverrideAuthenticationFilterFor<TestController>(null!));
         Assert.Equal("actionSelector", exception.ParamName);
     }
 
@@ -457,7 +457,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var exception = Assert.Throws<ArgumentNullException>(
-            () => builder.OverrideAuthorizationFilterFor<TestController>(null));
+            () => builder.OverrideAuthorizationFilterFor<TestController>(null!));
         Assert.Equal("actionSelector", exception.ParamName);
     }
 
@@ -467,7 +467,7 @@ public class RegistrationExtensionsFixture
     {
         var builder = new ContainerBuilder();
         var exception = Assert.Throws<ArgumentNullException>(
-            () => builder.OverrideExceptionFilterFor<TestController>(null));
+            () => builder.OverrideExceptionFilterFor<TestController>(null!));
         Assert.Equal("actionSelector", exception.ParamName);
     }
 
@@ -495,7 +495,7 @@ public class RegistrationExtensionsFixture
     public void RegisterFilterProviderThrowsExceptionForNullBuilder()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Autofac.Integration.Mvc.RegistrationExtensions.RegisterFilterProvider(null));
+            () => Autofac.Integration.Mvc.RegistrationExtensions.RegisterFilterProvider(null!));
         Assert.Equal("builder", exception.ParamName);
     }
 
@@ -503,7 +503,7 @@ public class RegistrationExtensionsFixture
     public void RegisterModelBinderProviderThrowsExceptionForNullBuilder()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Autofac.Integration.Mvc.RegistrationExtensions.RegisterModelBinderProvider(null));
+            () => Autofac.Integration.Mvc.RegistrationExtensions.RegisterModelBinderProvider(null!));
         Assert.Equal("builder", exception.ParamName);
     }
 
@@ -511,7 +511,7 @@ public class RegistrationExtensionsFixture
     public void RegisterModelBindersThrowsExceptionForNullAssemblies()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => new ContainerBuilder().RegisterModelBinders(null));
+            () => new ContainerBuilder().RegisterModelBinders(null!));
         Assert.Equal("modelBinderAssemblies", exception.ParamName);
     }
 
@@ -519,16 +519,16 @@ public class RegistrationExtensionsFixture
     public void RegisterModelBindersThrowsExceptionForNullBuilder()
     {
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Autofac.Integration.Mvc.RegistrationExtensions.RegisterModelBinders(null, Assembly.GetExecutingAssembly()));
+            () => Autofac.Integration.Mvc.RegistrationExtensions.RegisterModelBinders(null!, Assembly.GetExecutingAssembly()));
         Assert.Equal("builder", exception.ParamName);
     }
 
     private static void AssertFilterRegistration<TFilter, TService>(
         FilterScope filterScope,
-        MethodInfo methodInfo,
+        MethodInfo? methodInfo,
         Action<IRegistrationBuilder<TFilter, SimpleActivatorData, SingleRegistrationStyle>> configure,
         string metadataKey)
-            where TFilter : new()
+            where TFilter : notnull, new()
     {
         var builder = new ContainerBuilder();
         configure(builder.Register(c => new TFilter()));
@@ -536,7 +536,7 @@ public class RegistrationExtensionsFixture
 
         var service = container.Resolve<Meta<TService>>();
 
-        var metadata = (FilterMetadata)service.Metadata[metadataKey];
+        var metadata = (FilterMetadata)service.Metadata[metadataKey]!;
 
         Assert.Equal(typeof(TestController), metadata.ControllerType);
         Assert.Equal(filterScope, metadata.FilterScope);
